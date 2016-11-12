@@ -5,9 +5,11 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+/**
+ * Created by admin on 11/12/2016.
+ */
 
-public class LoginScreen extends ActionBarActivity {
-
+public class GroupScreen extends ActionBarActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

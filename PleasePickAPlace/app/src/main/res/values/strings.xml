@@ -3,4 +3,6 @@
 
     <string name="login_screen_message">Please login!</string>
     <string name="action_settings">Settings</string>
+    <string name="main_menu_message">Welcome! Create or join a group to pick a restaurant.</string>
+    <string name="group_screen_message">Welcome to {{group_name}}. Press below to start a vote.</string>
 </resources>
