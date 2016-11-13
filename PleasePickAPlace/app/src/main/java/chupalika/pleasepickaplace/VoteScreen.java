@@ -26,6 +26,8 @@ public class VoteScreen extends ActionBarActivity{
     ListView listView;
 
     Toast unknownError;
+    Toast parseError;
+    Toast threeError;
 
     Callback restaurantsCallback;
     Callback voteCallback;
@@ -33,7 +35,7 @@ public class VoteScreen extends ActionBarActivity{
     ArrayList<Restaurant> votes;
     ArrayAdapter<Restaurant> vadapter;
     ListView voteView;
-
+    int i;
     private AdapterView.OnItemClickListener voteClickedHandler;
 
     @Override
@@ -41,7 +43,10 @@ public class VoteScreen extends ActionBarActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vote_screen);
 
+        i = 0;
+        threeError = Toast.makeText(this.getApplicationContext(),"Three error occured", Toast.LENGTH_SHORT);
         unknownError = Toast.makeText(this.getApplicationContext(), "Unknown error occured", Toast.LENGTH_SHORT);
+        parseError = Toast.makeText(this.getApplicationContext(), "Parse error occured", Toast.LENGTH_SHORT);
         voteCallback = new VoteCallback();
         restaurantsCallback = new RestaurantsCallback();
         //TODO: Need some method for user to reorder their ranking on the screen (drag/drop? Prompts for first second third and use back button to undo?)
@@ -53,7 +58,8 @@ public class VoteScreen extends ActionBarActivity{
 
         votes = new ArrayList<Restaurant>();
         vadapter = new ArrayAdapter<Restaurant>(this, R.layout.vote_confirm_item, R.id.choice, votes);
-
+        voteView = (ListView) findViewById(R.id.vote_confirm_item);
+        voteView.setAdapter(vadapter);
         voteClickedHandler = new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView parent, View v, int position, long id) {
                 if(votes.size() < 3) {
@@ -75,7 +81,14 @@ public class VoteScreen extends ActionBarActivity{
     private class VoteCallback implements Callback {
         @Override
         public void callback(Requester requester) {
-            System.out.println("voted!");
+            String response = requester.getLastMessage();
+            if(response.equals("Success")){
+                if(!votes.isEmpty()){
+                    submitVote();
+                }
+            }else {
+                unknownError.show();
+            }
         }
     }
 
@@ -87,7 +100,7 @@ public class VoteScreen extends ActionBarActivity{
             if (response.contains("{")) {
                 try {
                     parseInput(response);
-                    System.out.println("Restaurants: " + restaurants + " " + restaurants.size());
+
 
                 }catch(IOException e){
                     unknownError.show();
@@ -105,7 +118,7 @@ public class VoteScreen extends ActionBarActivity{
         try{
             readRestaurants(jr);
         }catch(Exception e){
-            unknownError.show();
+            //parseError.show();
         }finally{
             jr.close();
         }
@@ -168,8 +181,26 @@ public class VoteScreen extends ActionBarActivity{
     }
     */
 
+    public void confirmVote(){
+        if (votes.size() != 3)
+            threeError.show();
+        else{
+            submitVote();
+        }
+    }
+    private void submitVote(){
+        SharedPreferences sp = this.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        String user = sp.getString(getString(R.string.login_username), "");
+        SharedPreferences gp = this.getSharedPreferences(getString(R.string.preference_group_key), Context.MODE_PRIVATE);
+        String group = gp.getString(getString(R.string.group_key), "");
 
+        Restaurant r = restaurants.remove(0);
+        i++;
 
+        String url = Requester.SERVERURL + "/getvotes?user=" + user + "&group=" + group + "&option=" + r.getId() + "&rank=" + i;
+        Requester requester = Requester.getInstance(this.getApplicationContext());
+        requester.addRequest(url,voteCallback);
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
