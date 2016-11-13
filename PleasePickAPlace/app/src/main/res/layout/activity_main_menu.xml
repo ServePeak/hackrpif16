@@ -35,8 +35,15 @@
             android:onClick="joinGroupListener"/>
     </LinearLayout>
 
-    <ListView android:id="@+id/group_list"
+    <TextView android:id="@+id/group_name"
         android:layout_below="@+id/button_row"
+        android:text="Your Groups:"
+        android:textSize="24dp"
+        android:layout_width="200dp"
+        android:layout_height="30dp"/>
+
+    <ListView android:id="@+id/group_list"
+        android:layout_below="@+id/group_name"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 </RelativeLayout>
