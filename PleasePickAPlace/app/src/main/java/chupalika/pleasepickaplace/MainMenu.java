@@ -9,6 +9,8 @@ import android.util.JsonReader;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -26,6 +28,8 @@ public class MainMenu extends ActionBarActivity{
 
     Callback getGroupCallback;
     ArrayList<Group> groupsList;
+    ArrayAdapter<Group> adapter;
+    ListView lw;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +46,9 @@ public class MainMenu extends ActionBarActivity{
 
         getGroupCallback = new GroupCallback();
         groupsList = new ArrayList<Group>();
+        lw = (ListView)findViewById(R.id.group_list);
+        adapter = new ArrayAdapter<Group>(this,R.layout.group_item,R.id.a_group_item,groupsList);
+        lw.setAdapter(adapter);
 
         String url = Requester.SERVERURL + "/login?user=" + user + "&pass=" + pw;
         //add the request to queue
@@ -57,12 +64,9 @@ public class MainMenu extends ActionBarActivity{
             //squiggly braces indicate groups were returned
             if (response.contains("{")) {
                 try {
-                    groupsList = parseInput(response);
-                    System.out.println("Size: " + groupsList.size());
-                    for(Group g : groupsList){
+                    parseInput(response);
 
-                    }
-                    // TODO: FOR BRANDON show the groups on the main page
+                    // TODO: show the groups on the main page
                     /* Probably like
                         Group name 1            <button> View Group </button>
                         Group name 2            <button> View Group </button>
@@ -84,29 +88,28 @@ public class MainMenu extends ActionBarActivity{
         }
     }
 
-    private ArrayList<Group> parseInput(String response) throws IOException {
+
+
+    private void parseInput(String response) throws IOException {
         JsonReader jr = new JsonReader(new StringReader(response));
         try{
-            return readGroups(jr);
+            readGroups(jr);
         }catch(Exception e){
             unknownError.show();
         }finally{
             jr.close();
         }
-        return null;
     }
 
-    private ArrayList<Group> readGroups(JsonReader jr) throws IOException{
-        ArrayList<Group> groups = new ArrayList<Group>();
-
+    private void readGroups(JsonReader jr) throws IOException{
         jr.beginObject();
         while(jr.hasNext()){
             String name = jr.nextName();
             String key = jr.nextString();
-            groups.add(new Group(name, key));
+            groupsList.add(new Group(name, key));
+            adapter.notifyDataSetChanged();
         }
         jr.endObject();
-        return groups;
     }
 
     @Override

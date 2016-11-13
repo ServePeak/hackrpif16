@@ -17,23 +17,47 @@
         android:layout_height="wrap_content" />
 
     <Space android:id="@+id/main_menu_space"
-        android:layout_below="@+id/main_menu_message"
         android:layout_width="match_parent"
-        android:layout_height="50dp" />
+        android:layout_height="20dp"
+        android:layout_below="@+id/main_menu_message"/>
+
+    <EditText android:id="@+id/group_text_box"
+        android:layout_below="@+id/main_menu_space"
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"
+        android:hint=""
+        />
+
+    <LinearLayout android:id="@+id/button_row"
+        android:layout_width="280dp"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/group_text_box">
 
     <Button android:id="@+id/create_group_button"
-        android:layout_below="@+id/main_menu_space"
+        android:layout_below="@+id/group_text_box"
         android:layout_centerHorizontal="true"
-        android:text="Create Group"
-        android:layout_width="130dp"
+        android:text="Create A Group"
+        android:layout_width="140dp"
         android:layout_height="40dp"
         android:onClick="createGroup"/>
 
     <Button android:id="@+id/join_group_button"
-        android:layout_below="@+id/create_group_button"
+        android:layout_below="@+id/group_text_box"
+        android:layout_toRightOf="@+id/create_group_button"
         android:layout_centerHorizontal="true"
-        android:text="Join Group"
-        android:layout_width="130dp"
+        android:text="Join A Group"
+        android:layout_width="140dp"
         android:layout_height="40dp" />
+</LinearLayout>
 
+    <ListView android:id="@+id/group_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/button_row">
+
+    </ListView>
 </RelativeLayout>

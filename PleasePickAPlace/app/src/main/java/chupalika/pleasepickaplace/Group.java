@@ -31,5 +31,8 @@ public class Group {
         members.add(user);
     }
 
+    public String toString(){
+        return name.toString();
+    }
 
 }
