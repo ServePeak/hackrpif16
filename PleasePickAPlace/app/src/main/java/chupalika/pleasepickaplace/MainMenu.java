@@ -135,13 +135,15 @@ public class MainMenu extends ActionBarActivity{
 
     // Called when the user click create group
     public void createGroup(View view){
-        //TODO: createGroup
+        Intent intent = new Intent(this, CreateGroup.class);
+        startActivity(intent);
 
     }
 
     // Called when the user clicks join group
     public void joinGroup(View view){
-        //TODO: joinGroup
+        Intent intent = new Intent(this, JoinGroup.class);
+        startActivity(intent);
 
     }
 

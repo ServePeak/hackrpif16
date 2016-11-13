@@ -26,7 +26,7 @@
         android:layout_height="40dp"
         android:orientation="horizontal"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/group_text_box">
+        android:layout_below="@id/main_menu_space">
 
     <Button android:id="@+id/create_group_button"
         android:layout_below="@+id/group_text_box"
