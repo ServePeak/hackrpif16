@@ -5,7 +5,7 @@
     <string name="action_logout">Log Out</string>
     <string name="main_menu_message">Welcome! Create or join a group to pick a restaurant.</string>
 
-    <string name="group_screen_message">Welcome to {{groupname}}.</string>
+    <string name="group_screen_message">Welcome to </string>
     <string name="group_members_empty">Waiting for members...</string>
     <string name="group_members_contains">Members:</string>
     <string name="vote_screen_message">Vote for your top three preferences.</string>

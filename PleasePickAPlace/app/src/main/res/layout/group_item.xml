@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="40dp">
+    android:layout_height="32dp">
     <TextView android:id="@+id/a_group_item"
         android:layout_height="match_parent"
-        android:layout_width="match_parent"/>
-    <Button android:id="@+id/view_group_button"
-        android:layout_height="match_parent"
-        android:layout_width="50dp"
-        android:text="View Group"
-        android:layout_toEndOf="@+id/a_group_item"
-        android:layout_toRightOf="@+id/a_group_item"/>
+        android:layout_width="match_parent"
+        android:textSize="24dp"/>
 </LinearLayout>
