@@ -20,22 +20,23 @@
         android:text=""
         android:textSize="24dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="40dp"
+        android:layout_below="@+id/group_members"/>
 
     <Space android:id="@+id/group_screen_space1"
         android:layout_below="@+id/group_screen_message"
         android:layout_width="match_parent"
-        android:layout_height="5dp" />
+        android:layout_height="0dp" />
 
     <TextView android:id="@+id/group_members"
         android:layout_below="@+id/group_screen_space1"
         android:text="@string/group_members_empty"
         android:textSize="24dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="40dp" />
 
     <Button android:id="@+id/start_vote_button"
-        android:layout_below="@+id/group_screen_space1"
+        android:layout_below="@+id/group_key_message"
         android:layout_centerHorizontal="true"
         android:text="Start Vote"
         android:layout_width="110dp"

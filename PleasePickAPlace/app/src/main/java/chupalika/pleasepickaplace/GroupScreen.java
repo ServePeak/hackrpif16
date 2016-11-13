@@ -57,17 +57,17 @@ public class GroupScreen extends ActionBarActivity{
         @Override
         public void callback(Requester requester) {
             String response = requester.getLastMessage();
-            System.out.println("Leader: " + response);
+            //System.out.println("Leader: " + response);
 
             if (response.isEmpty()){
 
             } else{// if (response.contains("{")){
                 //response = response.substring(1,response.length() - 1);
                 SharedPreferences sp = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-                String user = sp.getString(getString(R.string.group_key),"");
-                System.out.println("User: " + user);
+                String user = sp.getString(getString(R.string.login_username),"");
+                //System.out.println("User: " + user);
                 if(user.contains(response)){
-                    System.out.println("You are the leader!");
+                    //System.out.println("You are the leader!");
                     Button svote = (Button)findViewById(R.id.start_vote_button);
                     svote.setVisibility(View.VISIBLE);
 
