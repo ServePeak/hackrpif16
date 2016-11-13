@@ -11,18 +11,18 @@ url = "http://api.tripadvisor.com/api/partner/2.0/map/" + str(lat) + "," + str(l
 response = urllib.urlopen(url)
 dump = json.loads(response.read())
 
-info = []
-for x in range(0, len(dump['data'])):
-    specificInfo = {}
-    specificInfo['name'] = dump['data'][x]['name']
-    specificInfo['rating'] = dump['data'][x]['rating']
-    specificInfo['location'] = dump['data'][x]['address_obj']['address_string']
-    specificInfo['cost'] = dump['data'][x]['price_level']
-    if dump['data'][x]['cuisine'] == []:
-        specificInfo['description'] = ""
+specificInfo = {}
+for x in dump['data']:
+    id = x['location_id']
+    specificInfo[id] = {}
+    specificInfo[id]['name'] = x['name']
+    specificInfo[id]['rating'] = x['rating']
+    specificInfo[id]['location'] = x['address_obj']['address_string']
+    specificInfo[id]['cost'] = x['price_level']
+    if x['cuisine'] == []:
+        specificInfo[id]['description'] = ""
     else:
-        specificInfo['description'] = dump['data'][x]['cuisine'][0]['localized_name']
-    specificInfo['distance'] = dump['data'][x]['distance']
-    info.append(specificInfo)
+        specificInfo[id]['description'] = x['cuisine'][0]['localized_name']
+    specificInfo[id]['distance'] = x['distance']
         
-print info
+print specificInfo
