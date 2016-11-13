@@ -21,12 +21,10 @@
         android:layout_width="match_parent"
         android:layout_height="5dp" />
 
-
     <ListView android:id="@+id/vote_options"
         android:layout_width="match_parent"
         android:layout_height="320dp"
         android:layout_below="@id/vote_screen_space"/>
-
 
     <Button android:id="@+id/start_vote_button"
         android:layout_below="@+id/vote_options"
