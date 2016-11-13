@@ -64,10 +64,11 @@ public class VoteScreen extends ActionBarActivity{
         voteView.setAdapter(vadapter);
         voteClickedHandler = new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView parent, View v, int position, long id) {
+                if(votes.size() < 3) {
                     votes.add(restaurants.remove(position));
                     adapter.notifyDataSetChanged();
                     vadapter.notifyDataSetChanged();
-
+                }
             }
         };
         listView.setOnItemClickListener(voteClickedHandler);
