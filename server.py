@@ -78,29 +78,34 @@ def joingroup():
     group = request.args.get('group')
     connection = mysql.get_db()
     cursor = connection.cursor()
-    groupname = get_mysql("groupname", "groupu", "groupkey", group)
-    ret[groupname] = []
+    cursor.execute("SELECT groupname FROM groupu WHERE groupkey='" + group + "'")
+    groupname = cursor.fetchone()
     userid = get_mysql("userid", "user", "username", user)
-    cursor.execute("SELECT username FROM groupjoined c, groupu g, user u WHERE g.groupkey = c.groupkey AND u.userid = c.userid AND g.groupkey ='" + group + "'")
-    check = cursor.fetchall()
-    cursor.execute("SELECT username FROM groupmaster c, groupu g, user u WHERE g.groupkey = c.groupkey AND u.userid = c.userid AND g.groupkey ='" + group + "'")
-    check += cursor.fetchall()
-    print check
-    checkbool = True
-    for x in check:
-        if user in x:
-            checkbool = False
-            break
-    if checkbool:
-        cursor.execute("INSERT INTO groupjoined (groupkey, userid) VALUES ('" + group + "', '" + userid + "')")
-    cursor.execute("SELECT username FROM groupjoined c, groupu g, user u WHERE g.groupkey = c.groupkey AND u.userid = c.userid AND g.groupkey ='" + group + "'")
-    check = cursor.fetchall()
-    cursor.execute("SELECT username FROM groupmaster c, groupu g, user u WHERE g.groupkey = c.groupkey AND u.userid = c.userid AND g.groupkey ='" + group + "'")
-    check += cursor.fetchall()
-    for x in check:
-        ret[groupname].append(x[0])
-    connection.commit()
-    return json.dumps(ret) # Return all people within this group along with the groupname
+    if groupname is not None:
+        ret[groupname[0]] = []
+        print ret
+        cursor.execute("SELECT username FROM groupjoined c, groupu g, user u WHERE g.groupkey = c.groupkey AND u.userid = c.userid AND g.groupkey ='" + group + "'")
+        check = cursor.fetchall()
+        cursor.execute("SELECT username FROM groupmaster c, groupu g, user u WHERE g.groupkey = c.groupkey AND u.userid = c.userid AND g.groupkey ='" + group + "'")
+        check += cursor.fetchall()
+        checkbool = True
+        for x in check:
+            if user in x:
+                checkbool = False
+                break
+        if checkbool:
+            cursor.execute("INSERT INTO groupjoined (groupkey, userid) VALUES ('" + group + "', '" + userid + "')")
+        cursor.execute("SELECT username FROM groupjoined c, groupu g, user u WHERE g.groupkey = c.groupkey AND u.userid = c.userid AND g.groupkey ='" + group + "'")
+        check = cursor.fetchall()
+        cursor.execute("SELECT username FROM groupmaster c, groupu g, user u WHERE g.groupkey = c.groupkey AND u.userid = c.userid AND g.groupkey ='" + group + "'")
+        check += cursor.fetchall()
+        print check
+        for x in check:
+            ret[groupname[0]].append(x[0])
+        connection.commit()
+        return json.dumps(ret) # Return all people within this group along with the groupname
+    else:
+        return "Group does not exist."
     
 @app.route('/getleader')
 def getleader():
