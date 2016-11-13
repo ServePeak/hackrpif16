@@ -57,7 +57,7 @@ public class VoteScreen extends ActionBarActivity{
     }
 
     private class RestaurantsCallback implements Callback{
-        @Override
+        @Override   
         public void callback(Requester requester) {
             String response = requester.getLastMessage();
             //squiggly braces indicate restaurants were returned
