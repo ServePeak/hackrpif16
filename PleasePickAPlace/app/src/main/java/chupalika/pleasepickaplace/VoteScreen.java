@@ -38,8 +38,7 @@ public class VoteScreen extends ActionBarActivity{
     ListView voteView;
     int i;
     private AdapterView.OnItemClickListener voteClickedHandler;
-
-    @Override
+    private AdapterView.OnItemClickListener choiceClickedHandler;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vote_screen);
@@ -72,7 +71,13 @@ public class VoteScreen extends ActionBarActivity{
             }
         };
         listView.setOnItemClickListener(voteClickedHandler);
-
+        choiceClickedHandler = new AdapterView.OnItemClickListener(){
+            public void onItemClick(AdapterView parent, View v, int position, long id){
+                restaurants.add(votes.remove(position));
+                adapter.notifyDataSetChanged();
+                vadapter.notifyDataSetChanged();
+            }
+        };
 
         String url = Requester.SERVERURL + "/location?lat=42.729781&lng=-73.679248";
         //add the request to queue
