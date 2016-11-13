@@ -8,16 +8,21 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
+    android:background="@color/loginbg"
     tools:context=".GroupScreen">
 
     <TextView android:id="@+id/group_screen_message"
         android:text=""
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
         android:textSize="24dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <TextView android:id="@+id/group_key_message"
         android:text=""
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
         android:textSize="24dp"
         android:layout_width="match_parent"
         android:layout_height="40dp"
@@ -29,6 +34,8 @@
         android:layout_height="0dp" />
 
     <TextView android:id="@+id/group_members"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
         android:layout_below="@+id/group_screen_space1"
         android:text="@string/group_members_empty"
         android:textSize="24dp"
