@@ -9,6 +9,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 /**
  * Created by aleung013 on 11/12/2016.
  */
@@ -18,6 +21,7 @@ public class GroupScreen extends ActionBarActivity{
     Callback memberCallback;
     String groupName;
 
+    ArrayList<String> members;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,9 +49,23 @@ public class GroupScreen extends ActionBarActivity{
         public void callback(Requester requester){
             String response = requester.getLastMessage();
             if(response.isEmpty()){
+                System.out.println("No members");
+            } else{
+                response = response.replaceAll("\\[","");
+                response = response.replaceAll("\\]","");
+                response = response.replaceAll("\'","");
+                response = response.replaceAll(" ","");
+                members = new ArrayList<String>(Arrays.asList(response.split(",")));
+                //System.out.println(members.get(0));
 
-            }else{
-                System.out.println(response);
+                String membersText = "Members: ";
+                for (int i = 0; i < members.size(); i++) {
+                    membersText = membersText.concat(members.get(i));
+                    if (i != members.size()-1) membersText = membersText.concat(", ");
+                }
+
+                TextView textView = (TextView)findViewById(R.id.group_members);
+                textView.setText(membersText);
             }
         }
     }
