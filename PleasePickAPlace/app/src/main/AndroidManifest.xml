@@ -21,6 +21,15 @@
         <activity android:name=".MainMenu">
         </activity>
 
+        <activity android:name=".CreateGroup">
+        </activity>
+
+        <activity android:name=".JoinGroup">
+        </activity>
+
+        <activity android:name=".GroupScreen">
+        </activity>
+
     </application>
 
 </manifest>

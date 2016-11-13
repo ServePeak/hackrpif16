@@ -24,13 +24,13 @@
         android:layout_below="@+id/join_group_screen_space"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:hint="Group Name"/>
+        android:hint="Key Code"/>
 
     <Button android:id="@+id/confirm_join_group_button"
         android:layout_below="@+id/group_key_input"
-        android:text="Create Group"
+        android:text="Join Group"
         android:layout_width="130dp"
         android:layout_height="40dp"
-        android:onClick="loginButton"/>
+        android:onClick="joinGroupButtonListener"/>
 
 </RelativeLayout>
