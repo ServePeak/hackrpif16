@@ -36,15 +36,15 @@ public class JoinGroup extends ActionBarActivity{
         @Override
         public void callback(Requester requester) {
             String response = requester.getLastMessage();
-            if(response.contains("Error")){
-                unknownError.show();
+            if(response.contains("does not")){
+                joinFailed();
             }
             else if(!response.isEmpty()) {
                 String groupkey = response.substring(1, response.indexOf(':'));
                 joinSuccessful(groupkey);
             }
             else{
-                joinFailed();
+                unknownError.show();
             }
         }
     }

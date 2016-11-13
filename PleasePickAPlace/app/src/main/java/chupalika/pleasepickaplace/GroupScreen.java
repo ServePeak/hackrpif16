@@ -14,6 +14,7 @@ import android.widget.Button;
 
 public class GroupScreen extends ActionBarActivity{
     Callback leaderCallback;
+    Callback memberCallback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,13 +22,26 @@ public class GroupScreen extends ActionBarActivity{
         setContentView(R.layout.activity_group_screen);
 
         leaderCallback = new LeaderCallback();
-
+        memberCallback = new MemberCallback();
         SharedPreferences sp = this.getSharedPreferences(getString(R.string.preference_group_key), Context.MODE_PRIVATE);
         String groupKey = sp.getString(getString(R.string.group_key),"");
         String url = Requester.SERVERURL + "/getleader?" + groupKey;
-
+        String url3 = Requester.SERVERURL + "/getmembers?" + groupKey;
         Requester requester = Requester.getInstance(this.getApplicationContext());
         requester.addRequest(url,leaderCallback);
+        requester.addRequest(url3,memberCallback);
+    }
+
+    private class MemberCallback implements Callback{
+        @Override
+        public void callback(Requester requester){
+            String response = requester.getLastMessage();
+            if(response.isEmpty()){
+
+            }else{
+                System.out.println(response);
+            }
+        }
     }
 
     private class LeaderCallback implements Callback{
