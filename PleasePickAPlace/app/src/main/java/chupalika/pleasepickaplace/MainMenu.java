@@ -57,13 +57,6 @@ public class MainMenu extends ActionBarActivity /*implements LoaderManager.Loade
 
         getGroupCallback = new GroupCallback();
 
-        // TODO: show the groups on the main page
-                    /* Probably like
-                        Group name 1            <button> View Group </button>
-                        Group name 2            <button> View Group </button>
-                        etc.
-                    */
-
         groupsList = new ArrayList<Group>();
         adapter = new ArrayAdapter<Group>(this, R.layout.group_item, R.id.a_group_item, groupsList);
         listView = (ListView) findViewById(R.id.group_list);
