@@ -37,6 +37,9 @@ public class MainMenu extends ActionBarActivity /*implements LoaderManager.Loade
 
     private AdapterView.OnItemClickListener groupClickedHandler;
 
+    private String username;
+    private String password;
+
     /*
     ArrayAdapter<Group> adapter;
     ListView lw;
@@ -48,14 +51,33 @@ public class MainMenu extends ActionBarActivity /*implements LoaderManager.Loade
         setContentView(R.layout.activity_main_menu);
 
         SharedPreferences sp = this.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        String user = sp.getString(getString(R.string.login_username), "");
-        String pw = sp.getString(getString(R.string.login_password), "");
+        username = sp.getString(getString(R.string.login_username), "");
+        password = sp.getString(getString(R.string.login_password), "");
 
         groupCreateSuccess = Toast.makeText(this.getApplicationContext(), "Group created successfully", Toast.LENGTH_SHORT);
         unknownError = Toast.makeText(this.getApplicationContext(), "Unknown error occured", Toast.LENGTH_SHORT);
         logoutToast = Toast.makeText(this.getApplicationContext(), "Logged out", Toast.LENGTH_SHORT);
 
         getGroupCallback = new GroupCallback();
+
+        //getLoaderManager().initLoader(0, null, this);
+        /*
+        lw = (ListView)findViewById(R.id.group_list);
+        adapter = new ArrayAdapter<Group>(this,R.layout.group_item,R.id.a_group_item,groupsList);
+        lw.setAdapter(adapter);
+        */
+
+        /*
+        String url = Requester.SERVERURL + "/login?user=" + username + "&pass=" + password;
+        //add the request to queue
+        Requester requester = Requester.getInstance(this.getApplicationContext());
+        requester.addRequest(url, getGroupCallback);
+        */
+    }
+
+    //refresh the group list when resuming activity
+    public void onResume() {
+        super.onResume();
 
         groupsList = new ArrayList<Group>();
         adapter = new ArrayAdapter<Group>(this, R.layout.group_item, R.id.a_group_item, groupsList);
@@ -68,14 +90,8 @@ public class MainMenu extends ActionBarActivity /*implements LoaderManager.Loade
             }
         };
         listView.setOnItemClickListener(groupClickedHandler);
-        //getLoaderManager().initLoader(0, null, this);
-        /*
-        lw = (ListView)findViewById(R.id.group_list);
-        adapter = new ArrayAdapter<Group>(this,R.layout.group_item,R.id.a_group_item,groupsList);
-        lw.setAdapter(adapter);
-        */
 
-        String url = Requester.SERVERURL + "/login?user=" + user + "&pass=" + pw;
+        String url = Requester.SERVERURL + "/login?user=" + username + "&pass=" + password;
         //add the request to queue
         Requester requester = Requester.getInstance(this.getApplicationContext());
         requester.addRequest(url, getGroupCallback);
