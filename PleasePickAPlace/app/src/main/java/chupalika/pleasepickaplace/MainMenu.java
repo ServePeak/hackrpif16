@@ -194,10 +194,6 @@ public class MainMenu extends ActionBarActivity /*implements LoaderManager.Loade
 
     private void enterGroup(Group g) {
         Intent intent = new Intent(this, GroupScreen.class);
-        SharedPreferences SP = this.getSharedPreferences(getString(R.string.preference_group_key), Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = SP.edit();
-        editor.putString(getString(R.string.group_key),g.getKey());
-        editor.commit();
         intent.putExtra(EXTRA_GROUP_NAME, g.toString());
         startActivity(intent);
     }
