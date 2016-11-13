@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -17,11 +18,22 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 public class LoginScreen extends ActionBarActivity {
+    Toast loginSucceededToast;
+    Toast loginBadCredentials;
+    Toast loginEmptyFields;
+    Toast loginFailedToast;
+    Toast unknownError;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_screen);
+
+        loginSucceededToast = Toast.makeText(this.getApplicationContext(), "Login Succeeded!", Toast.LENGTH_SHORT);
+        loginBadCredentials = Toast.makeText(this.getApplicationContext(), "Username or Password is wrong", Toast.LENGTH_SHORT);
+        loginEmptyFields = Toast.makeText(this.getApplicationContext(), "Username or Password field is empty", Toast.LENGTH_SHORT);
+        loginFailedToast = Toast.makeText(this.getApplicationContext(), "Error on Login Request!", Toast.LENGTH_SHORT);
+        unknownError = Toast.makeText(this.getApplicationContext(), "Unknown error occured", Toast.LENGTH_SHORT);
     }
 
 
@@ -47,27 +59,49 @@ public class LoginScreen extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    //called when the user clicks the send button
+    //called when the user clicks the login button
+    //sends a http request to server, checks the response, logs in if the response is correct
     public void login(View view) {
         EditText temp1 = (EditText)findViewById(R.id.username_input);
         EditText temp2 = (EditText)findViewById(R.id.password_input);
         String loginUsername = temp1.getText().toString();
         String loginPassword = temp2.getText().toString();
 
-        //Get a RequestQueue
+        //don't do anything if the username or password is empty
+        if (loginUsername.isEmpty() || loginPassword.isEmpty()) {
+            loginEmptyFields.show();
+            return;
+        }
+
+        //Get a RequestQueue, create the url from the inputted username and password
         RequestQueue queue = Requester.getInstance(this.getApplicationContext()).getRequestQueue();
-        String url = "http://chupalika.github.io/";
+        String url = "http://762ffcaf.ngrok.io/api?user=" + loginUsername + "&pass=" + loginPassword;
 
         //Request a String response the url
         StringRequest loginRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            //called when a response is received
             @Override
             public void onResponse(String response) {
-                System.out.println("Login Request succeeded!");
-                loginSucceeded();
+                System.out.println(response);
+                //bad credentials
+                if (response.contains("wrong")) {
+                    loginBadCredentials.show();
+                }
+                //correct credentials: start the main menu activity
+                else if (response.contains("success")) {
+                    loginSucceededToast.show();
+                    loginSucceeded();
+                }
+                //unknown error
+                else {
+                    unknownError.show();
+                }
             }
         }, new Response.ErrorListener() {
+            //called when there is an error on the request or no response
             @Override
             public void onErrorResponse(VolleyError error) {
+                loginFailedToast.show();
                 System.out.println("Error on Login Request!");
             }
         });
@@ -76,6 +110,7 @@ public class LoginScreen extends ActionBarActivity {
         queue.add(loginRequest);
     }
 
+    //starts the Main Menu activity
     private void loginSucceeded() {
         Intent intent = new Intent(this, MainMenu.class);
         startActivity(intent);
