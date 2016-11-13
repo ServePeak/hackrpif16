@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 public class JoinGroup extends ActionBarActivity{
     Callback jgCallback;
+    Callback nameCallback;
     Toast joinSuccessful;
     Toast unknownError;
     Toast invalidKeyToast;
@@ -65,7 +66,6 @@ public class JoinGroup extends ActionBarActivity{
     }
 
     private void joinSuccessful(String groupkey){
-        Intent intent = new Intent(this, GroupScreen.class);
         //Write to shared preference the current group
 
         SharedPreferences SP = this.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
@@ -75,6 +75,25 @@ public class JoinGroup extends ActionBarActivity{
 
         joinSuccessful.show();
 
+        String url = Requester.SERVERURL + "/getgroupname?group=" + groupkey;
+
+        Requester requester = Requester.getInstance(this.getApplicationContext());
+        requester.addRequest(url,nameCallback);
+    }
+
+    private class NameCallback implements Callback{
+        @Override
+        public void callback(Requester requester){
+            String response = requester.getLastMessage();
+            if(!response.isEmpty()){
+                goToGroupScreen(response);
+            }
+        }
+    }
+
+    private void goToGroupScreen(String gName){
+        Intent intent = new Intent(this,GroupScreen.class);
+        intent.putExtra(MainMenu.EXTRA_GROUP_NAME, gName);
         startActivity(intent);
     }
 
