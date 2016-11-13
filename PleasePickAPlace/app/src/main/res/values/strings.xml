@@ -9,6 +9,8 @@
     <string name="group_members_empty">Waiting for members...</string>
     <string name="group_members_contains">Members:</string>
     <string name="vote_screen_message">Vote for your top three preferences.</string>
+    <string name="create_group_screen_message">Enter a name for your group:</string>
+    <string name="join_group_screen_message">Enter a key code to join a group:</string>
 
     <string name="preference_file_key">preferences_shared</string>
     <string name="login_username">preferences_username</string>
