@@ -116,6 +116,27 @@ def getleader():
     check = cursor.fetchone()
     return str(check[0])
     
+@app.route('/getmembers')
+def getmembers():
+    ret = []
+    group = request.args.get('group')
+    connection = mysql.get_db()
+    cursor = connection.cursor()
+    cursor.execute("SELECT username FROM groupmaster c, groupu g, user u WHERE g.groupkey = c.groupkey AND u.userid = c.userid AND g.groupkey ='" + group + "'")
+    check = cursor.fetchall()
+    cursor.execute("SELECT username FROM groupjoined c, groupu g, user u WHERE g.groupkey = c.groupkey AND u.userid = c.userid AND g.groupkey ='" + group + "'")
+    check += cursor.fetchall()
+    for x in check:
+        ret.append(str(x[0]))
+    return str(ret)
+    
+@app.route('/getgroupname')
+def getgroupname():
+    group = request.args.get('group')
+    connection = mysql.get_db()
+    cursor = connection.cursor()
+    return get_mysql("groupname", "groupu", "groupkey", group)
+    
 @app.route('/location')
 def location():
     lat = request.args.get('lat')
