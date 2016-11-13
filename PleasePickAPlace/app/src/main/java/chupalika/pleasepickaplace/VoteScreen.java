@@ -7,6 +7,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.JsonReader;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -29,6 +30,12 @@ public class VoteScreen extends ActionBarActivity{
     Callback restaurantsCallback;
     Callback voteCallback;
 
+    ArrayList<Restaurant> votes;
+    ArrayAdapter<Restaurant> vadapter;
+    ListView voteView;
+
+    private AdapterView.OnItemClickListener voteClickedHandler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +50,21 @@ public class VoteScreen extends ActionBarActivity{
         adapter = new ArrayAdapter<Restaurant>(this, R.layout.vote_option_item, R.id.a_vote_option, restaurants);
         listView = (ListView) findViewById(R.id.vote_options);
         listView.setAdapter(adapter);
+
+        votes = new ArrayList<Restaurant>();
+        vadapter = new ArrayAdapter<Restaurant>(this, R.layout.vote_confirm_item, R.id.choice, votes);
+
+        voteClickedHandler = new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView parent, View v, int position, long id) {
+                if(votes.size() < 3) {
+                    votes.add(restaurants.remove(position));
+                    adapter.notifyDataSetChanged();
+                    vadapter.notifyDataSetChanged();
+                }
+            }
+        };
+        listView.setOnItemClickListener(voteClickedHandler);
+
 
         String url = Requester.SERVERURL + "/location?lat=42.729781&lng=-73.679248";
         //add the request to queue
@@ -145,6 +167,9 @@ public class VoteScreen extends ActionBarActivity{
         return true;
     }
     */
+
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
