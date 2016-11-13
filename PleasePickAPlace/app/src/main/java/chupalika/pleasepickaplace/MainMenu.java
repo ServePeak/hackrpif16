@@ -43,7 +43,7 @@ public class MainMenu extends ActionBarActivity{
         getGroupCallback = new GroupCallback();
         groupsList = new ArrayList<Group>();
 
-        String url = "http://762ffcaf.ngrok.io/login?user=" + user + "&pass=" + pw;
+        String url = Requester.SERVERURL + "/login?user=" + user + "&pass=" + pw;
         //add the request to queue
         Requester requester = Requester.getInstance(this.getApplicationContext());
         requester.addRequest(url,getGroupCallback);
@@ -129,12 +129,16 @@ public class MainMenu extends ActionBarActivity{
         }
     }
 
+
     // Called when the user click create group
     private void createGroup(View view){
 
     }
 
     // Called when the user clicks join group
+    private void joinGroup(View view){
+
+    }
 
     // Called when group create is successfully returned
     private void groupCreateSuccess(){

@@ -159,7 +159,7 @@ public class LoginScreen extends ActionBarActivity {
     //sends a http request to server, checks the response, logs in if the response is correct
     private void login(String loginUsername, String loginPassword) {
         //create the url from the inputted username and password
-        String url = "http://762ffcaf.ngrok.io/login?user=" + loginUsername + "&pass=" + loginPassword;
+        String url = Requester.SERVERURL + "/login?user=" + loginUsername + "&pass=" + loginPassword;
 
         //add the request to queue
         Requester requester = Requester.getInstance(this.getApplicationContext());
@@ -168,7 +168,7 @@ public class LoginScreen extends ActionBarActivity {
 
     private void register(String registerUsername, String registerPassword) {
         //create the url from the inputted username and password
-        String url = "http://762ffcaf.ngrok.io/register?user=" + registerUsername + "&pass=" + registerPassword;
+        String url = Requester.SERVERURL + "/register?user=" + registerUsername + "&pass=" + registerPassword;
 
         //add the request to queue
         Requester requester = Requester.getInstance(this.getApplicationContext());

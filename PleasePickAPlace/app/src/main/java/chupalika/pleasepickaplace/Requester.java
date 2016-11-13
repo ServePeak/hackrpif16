@@ -17,6 +17,7 @@ public class Requester {
     private RequestQueue queue;
     private static Context context;
 
+    public static final String SERVERURL = "http://762ffcaf.ngrok.io";
     private String lastMessage = "";
 
     private Requester(Context c) {
