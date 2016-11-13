@@ -1,6 +1,8 @@
 package chupalika.pleasepickaplace;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -21,6 +23,7 @@ public class LoginScreen extends ActionBarActivity {
 
     Callback loginCallback;
     Callback registerCallback;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,13 +40,21 @@ public class LoginScreen extends ActionBarActivity {
 
         loginCallback = new LoginCallback();
         registerCallback = new RegisterCallback();
+
+        SharedPreferences SP = this.getPreferences(Context.MODE_PRIVATE);
+        String usernamePref = SP.getString(getString(R.string.login_username), "NOTLOGGEDIN");
+        String passwordPref = SP.getString(getString(R.string.login_password), "NOTLOGGEDIN");
+        if (usernamePref == "NOTLOGGEDIN" || passwordPref == "NOTLOGGEDIN") {}
+        else {
+            login(usernamePref, passwordPref);
+        }
     }
 
     private class LoginCallback implements Callback{
         @Override
         public void callback(Requester requester) {
             String response = requester.getLastMessage();
-            System.out.println("Response is " + response);
+            //System.out.println("Response is " + response);
 
             //wrong credentials
             if (response.contains("does not exist")) {
@@ -53,8 +64,8 @@ public class LoginScreen extends ActionBarActivity {
             else if (response.contains("Error")) {
                 requestErrorToast.show();
             }
-            //every other string should indicate correct credentials: start the main menu activity
-            else if (!(response.isEmpty())) {
+            //squiggly braces indicate correct credentials...?: start the main menu activity
+            else if (response.contains("{")) {
                 loginSucceededToast.show();
                 loginSucceeded();
             }
@@ -90,13 +101,14 @@ public class LoginScreen extends ActionBarActivity {
         }
     }
 
-
+    /*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_login_screen, menu);
         return true;
     }
+    */
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -105,17 +117,10 @@ public class LoginScreen extends ActionBarActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
     }
 
-    //called when the user clicks the login button
-    //sends a http request to server, checks the response, logs in if the response is correct
-    public void login(View view) {
+    public void loginButton(View view) {
         EditText temp1 = (EditText)findViewById(R.id.username_input);
         EditText temp2 = (EditText)findViewById(R.id.password_input);
         String loginUsername = temp1.getText().toString();
@@ -127,16 +132,16 @@ public class LoginScreen extends ActionBarActivity {
             return;
         }
 
-        //Get a RequestQueue, create the url from the inputted username and password
-        String url = "http://762ffcaf.ngrok.io/login?user=" + loginUsername + "&pass=" + loginPassword;
+        SharedPreferences SP = this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = SP.edit();
+        editor.putString(getString(R.string.login_username), loginUsername);
+        editor.putString(getString(R.string.login_password), loginPassword);
+        editor.commit();
 
-        //add the request to queue
-        Requester requester = Requester.getInstance(this.getApplicationContext());
-        requester.addRequest(url,loginCallback);
-
+        login(loginUsername, loginPassword);
     }
 
-    public void register(View view) {
+    public void registerButton(View view) {
         EditText temp1 = (EditText)findViewById(R.id.username_input);
         EditText temp2 = (EditText)findViewById(R.id.password_input);
         String registerUsername = temp1.getText().toString();
@@ -148,7 +153,22 @@ public class LoginScreen extends ActionBarActivity {
             return;
         }
 
-        //Get a RequestQueue, create the url from the inputted username and password
+        register(registerUsername, registerPassword);
+    }
+
+    //called when the user clicks the login button
+    //sends a http request to server, checks the response, logs in if the response is correct
+    private void login(String loginUsername, String loginPassword) {
+        //create the url from the inputted username and password
+        String url = "http://762ffcaf.ngrok.io/login?user=" + loginUsername + "&pass=" + loginPassword;
+
+        //add the request to queue
+        Requester requester = Requester.getInstance(this.getApplicationContext());
+        requester.addRequest(url,loginCallback);
+    }
+
+    private void register(String registerUsername, String registerPassword) {
+        //create the url from the inputted username and password
         String url = "http://762ffcaf.ngrok.io/register?user=" + registerUsername + "&pass=" + registerPassword;
 
         //add the request to queue

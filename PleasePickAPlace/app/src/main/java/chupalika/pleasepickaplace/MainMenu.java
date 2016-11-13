@@ -1,6 +1,8 @@
 package chupalika.pleasepickaplace;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -21,6 +23,7 @@ import com.android.volley.toolbox.StringRequest;
 public class MainMenu extends ActionBarActivity{
     Toast groupCreateSuccess;
     Toast unknownError;
+    Toast logoutToast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,13 +32,14 @@ public class MainMenu extends ActionBarActivity{
 
         groupCreateSuccess = Toast.makeText(this.getApplicationContext(),"Group created successfully",Toast.LENGTH_SHORT);
         unknownError = Toast.makeText(this.getApplicationContext(), "Unknown error occured", Toast.LENGTH_SHORT);
+        logoutToast = Toast.makeText(this.getApplicationContext(), "Logged out", Toast.LENGTH_SHORT);
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_login_screen, menu);
+        getMenuInflater().inflate(R.menu.menu_main_menu, menu);
         return true;
     }
 
@@ -46,12 +50,13 @@ public class MainMenu extends ActionBarActivity{
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch(item.getItemId()) {
+            case R.id.action_logout:
+                logout();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
     }
 
     // Called when the user click create group
@@ -87,5 +92,21 @@ public class MainMenu extends ActionBarActivity{
     private void groupCreateSuccess(){
         Intent grouppage = new Intent(this, GroupScreen.class);
         startActivity(grouppage);
+    }
+
+    private void logout() {
+        SharedPreferences SP = this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = SP.edit();
+        editor.putString(getString(R.string.login_username), "");
+        editor.putString(getString(R.string.login_password), "");
+        editor.commit();
+
+        logoutToast.show();
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+
     }
 }
