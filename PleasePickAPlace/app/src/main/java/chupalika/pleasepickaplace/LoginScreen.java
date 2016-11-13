@@ -1,10 +1,19 @@
 package chupalika.pleasepickaplace;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 
 public class LoginScreen extends ActionBarActivity {
 
@@ -35,5 +44,44 @@ public class LoginScreen extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    //called when the user clicks the send button
+    public void login(View view) {
+        EditText temp1 = (EditText)findViewById(R.id.username_input);
+        EditText temp2 = (EditText)findViewById(R.id.password_input);
+        String loginUsername = temp1.getText().toString();
+        String loginPassword = temp2.getText().toString();
+
+        //Get a RequestQueue
+        RequestQueue queue = Requester.getInstance(this.getApplicationContext()).getRequestQueue();
+        String url = "http://chupalika.github.io/";
+
+        //Request a String response the url
+        StringRequest loginRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                System.out.println("Login Request succeeded!");
+                loginSucceeded();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println("Error on Login Request!");
+            }
+        });
+
+        //Add the request to RequestQueue
+        queue.add(loginRequest);
+    }
+
+    private void loginSucceeded() {
+        Intent intent = new Intent(this, MainMenu.class);
+        startActivity(intent);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 }
