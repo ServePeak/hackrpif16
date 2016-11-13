@@ -5,11 +5,15 @@
     <string name="action_logout">Log Out</string>
     <string name="main_menu_message">Welcome! Create or join a group to pick a restaurant.</string>
 
-    <string name="group_screen_message">Welcome to .</string>
+    <string name="group_screen_message">Welcome to {{groupname}}.</string>
     <string name="group_members_empty">Waiting for members...</string>
     <string name="group_members_contains">Members:</string>
 
     <string name="preference_file_key">preferences_shared</string>
     <string name="login_username">preferences_username</string>
     <string name="login_password">preferences_password</string>
+
+    <string name="preference_group_key">preferences_group</string>
+    <string name="group_name">preferences_current_group_name</string>
+    <string name="group_key">preferences_current_group_key</string>
 </resources>

@@ -58,8 +58,11 @@ public class MainMenu extends ActionBarActivity{
             if (response.contains("{")) {
                 try {
                     groupsList = parseInput(response);
-                    System.out.println("groups joined: " + groupsList.size());
-                    // TODO: FOR BRANDON instead of printing # of groups, show the groups on the main page
+                    System.out.println("Size: " + groupsList.size());
+                    for(Group g : groupsList){
+
+                    }
+                    // TODO: FOR BRANDON show the groups on the main page
                     /* Probably like
                         Group name 1            <button> View Group </button>
                         Group name 2            <button> View Group </button>
@@ -132,12 +135,16 @@ public class MainMenu extends ActionBarActivity{
 
     // Called when the user click create group
     private void createGroup(View view){
-
+        //TODO: createGroup
+        //Create a textbox (popup?) for user to enter group name
+        //Make a /makegroup API call
     }
 
     // Called when the user clicks join group
     private void joinGroup(View view){
-
+        //TODO: joinGroup
+        //Create a textbox (popup?) for user to enter group key
+        //Make a /joingroup API call
     }
 
     // Called when group create is successfully returned

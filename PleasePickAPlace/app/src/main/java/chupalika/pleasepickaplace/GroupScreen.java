@@ -1,23 +1,52 @@
 package chupalika.pleasepickaplace;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 /**
  * Created by aleung013 on 11/12/2016.
  */
 
 public class GroupScreen extends ActionBarActivity{
+    Callback leaderCallback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_screen);
 
+        leaderCallback = new LeaderCallback();
 
+        SharedPreferences sp = this.getSharedPreferences(getString(R.string.preference_group_key), Context.MODE_PRIVATE);
+        String groupKey = sp.getString(getString(R.string.group_key),"");
         //TODO: If group leader, show call vote
+        String url = Requester.SERVERURL + "/getleader?" + groupKey;
+
+        Requester requester = Requester.getInstance(this.getApplicationContext());
+        requester.addRequest(url,leaderCallback);
+    }
+
+    private class LeaderCallback implements Callback{
+        @Override
+        public void callback(Requester requester) {
+            String response = requester.getLastMessage();
+            if (response.isEmpty()){
+
+            } else if (response.contains("{")){
+                response = response.substring(1,response.length() - 1);
+                SharedPreferences sp = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+                String user = sp.getString(getString(R.string.group_key),"");
+                if(user.equals(response)){
+                    Button svote = (Button)findViewById(R.id.start_vote_button);
+                    svote.setVisibility(View.VISIBLE);
+                }
+            }
+        }
     }
 
     /*

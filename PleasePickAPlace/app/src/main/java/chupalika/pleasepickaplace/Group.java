@@ -10,12 +10,25 @@ public class Group {
     // Class that stores Group name, key, and current members
     private String name;
     private String key;
-    private ArrayList<String> members; // TODO: change this to the thing that can update listeners when it updates
+    private ArrayList<String> members;
 
     public Group(String aname,String akey){
         this.name = aname;
         this.key = akey;
-        //TODO: API call to get group members
+
+        //TODO: API call to get members in this group
+    }
+
+    public int numMembers(){
+        return members.size();
+    }
+
+    public ArrayList<String> getMembers(){
+        return members;
+    }
+
+    public void addMember(String user){
+        members.add(user);
     }
 
 
