@@ -1,6 +1,7 @@
 package chupalika.pleasepickaplace;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -28,6 +29,7 @@ public class VoteScreen extends ActionBarActivity{
     Toast unknownError;
     Toast parseError;
     Toast threeError;
+    Toast voteConfirmed;
 
     Callback restaurantsCallback;
     Callback voteCallback;
@@ -47,6 +49,7 @@ public class VoteScreen extends ActionBarActivity{
         threeError = Toast.makeText(this.getApplicationContext(),"Three error occured", Toast.LENGTH_SHORT);
         unknownError = Toast.makeText(this.getApplicationContext(), "Unknown error occured", Toast.LENGTH_SHORT);
         parseError = Toast.makeText(this.getApplicationContext(), "Parse error occured", Toast.LENGTH_SHORT);
+        voteConfirmed = Toast.makeText(this.getApplicationContext(), "Vote confirmed", Toast.LENGTH_SHORT);
         voteCallback = new VoteCallback();
         restaurantsCallback = new RestaurantsCallback();
         //TODO: Need some method for user to reorder their ranking on the screen (drag/drop? Prompts for first second third and use back button to undo?)
@@ -83,7 +86,7 @@ public class VoteScreen extends ActionBarActivity{
         public void callback(Requester requester) {
             String response = requester.getLastMessage();
             if(response.equals("Success")){
-                if(!votes.isEmpty()){
+                if(votes.size() > 0){
                     submitVote();
                 }
             }else {
@@ -181,7 +184,7 @@ public class VoteScreen extends ActionBarActivity{
     }
     */
 
-    public void confirmVote(){
+    public void confirmVote(View view){
         if (votes.size() != 3)
             threeError.show();
         else{
@@ -189,12 +192,17 @@ public class VoteScreen extends ActionBarActivity{
         }
     }
     private void submitVote(){
+        if(votes.size() == 0){
+            voteConfirmed.show();
+            Intent intent = new Intent(this, MainMenu.class);
+            startActivity(intent);
+        }
         SharedPreferences sp = this.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         String user = sp.getString(getString(R.string.login_username), "");
         SharedPreferences gp = this.getSharedPreferences(getString(R.string.preference_group_key), Context.MODE_PRIVATE);
         String group = gp.getString(getString(R.string.group_key), "");
 
-        Restaurant r = restaurants.remove(0);
+        Restaurant r = votes.remove(0);
         i++;
 
         String url = Requester.SERVERURL + "/getvotes?user=" + user + "&group=" + group + "&option=" + r.getId() + "&rank=" + i;
