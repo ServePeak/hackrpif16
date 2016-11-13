@@ -40,10 +40,10 @@ public class CreateGroup extends ActionBarActivity{
                 unknownError.show();
             }
             else if(!response.isEmpty()) {
-                joinSuccessful(response);
+                createSuccessful(response);
             }
             else{
-                joinFailed();
+                createFailed();
             }
         }
     }
@@ -62,7 +62,7 @@ public class CreateGroup extends ActionBarActivity{
         requester.addRequest(url,cgCallback);
     }
 
-    private void joinSuccessful(String groupkey){
+    private void createSuccessful(String groupkey){
         Intent intent = new Intent(this, GroupScreen.class);
         //Write to shared preference the current group
 
@@ -76,7 +76,7 @@ public class CreateGroup extends ActionBarActivity{
         startActivity(intent);
     }
 
-    private void joinFailed(){
+    private void createFailed(){
         invalidKeyToast.show();
     }
     /*
