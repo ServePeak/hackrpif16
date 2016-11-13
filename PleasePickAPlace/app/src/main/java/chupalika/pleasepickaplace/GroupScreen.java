@@ -10,10 +10,14 @@ import android.view.MenuItem;
  */
 
 public class GroupScreen extends ActionBarActivity{
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_screen);
+
+
+        //TODO: If group leader, show call vote
     }
 
 
