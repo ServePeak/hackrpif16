@@ -2,7 +2,7 @@
     <string name="app_name">PleasePickAPlace</string>
 
     <string name="action_logout">Log Out</string>
-    <string name="main_menu_message">Welcome! Create or join a group to pick a restaurant.</string>
+    <string name="main_menu_message">Create or join a group to pick a restaurant.</string>
 
     <string name="group_screen_message">Welcome to </string>
     <string name="group_members_empty">Waiting for members...</string>

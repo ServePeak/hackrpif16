@@ -2,4 +2,5 @@
 <resources>
     <color name="loginbg">#f44336</color>
     <color name="loginbtn">#f66055</color>
+    <color name="mainbg">#E53935</color>
 </resources>
