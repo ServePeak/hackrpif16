@@ -58,26 +58,33 @@ public class MainMenu extends ActionBarActivity{
     public void createGroup(View view){
         //Get a RequestQueue, create the url from the inputted username and password
         RequestQueue queue = Requester.getInstance(this.getApplicationContext()).getRequestQueue();
+        System.out.println("Creating group for user");
         String url = "http://762ffcaf.ngrok.io/api?user="; // TODO: edit this to create group api call
 
         StringRequest groupRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                System.out.println("Got a response");
                 if (!response.isEmpty()) {
                     groupCreateSuccess.show();
-                    groupCreateSuccess(response);
+                    groupCreateSuccess();
+                }else{
+                    unknownError.show();
                 }
             }
         }, new Response.ErrorListener(){
             @Override
             public void onErrorResponse(VolleyError error){
+                System.out.println("Am i in here?");
                 unknownError.show();
             }
         });
+
+        queue.add(groupRequest);
     }
 
     // Called when group create is successfully returned
-    private void groupCreateSuccess(String response){
+    private void groupCreateSuccess(){
         Intent grouppage = new Intent(this, GroupScreen.class);
         startActivity(grouppage);
     }

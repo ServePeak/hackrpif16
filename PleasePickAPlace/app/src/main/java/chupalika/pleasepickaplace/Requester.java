@@ -38,7 +38,7 @@ public class Requester {
         return queue;
     }
 
-    public void addRequest(String url) {
+    public void addRequest(String url,final Callback callback) {
         //Request a String response the url
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             //called when a response is received
@@ -46,6 +46,7 @@ public class Requester {
             public void onResponse(String response) {
                 System.out.println(response);
                 setLastMessage(response);
+                callback.callback(instance);
             }
         }, new Response.ErrorListener() {
             //called when there is an error on the request or no response
@@ -53,11 +54,13 @@ public class Requester {
             public void onErrorResponse(VolleyError error) {
                 System.out.println("Error on Request!");
                 setLastMessage("Error on Request!");
+                callback.callback(instance);
             }
         });
 
         //Add the request to RequestQueue
         queue.add(request);
+
     }
 
     //retrieves the last message, returns it, and resets it

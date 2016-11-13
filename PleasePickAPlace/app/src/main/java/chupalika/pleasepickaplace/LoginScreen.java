@@ -1,7 +1,6 @@
 package chupalika.pleasepickaplace;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -9,13 +8,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 
 public class LoginScreen extends ActionBarActivity {
     Toast loginSucceededToast;
@@ -27,6 +19,8 @@ public class LoginScreen extends ActionBarActivity {
     Toast requestErrorToast;
     Toast unknownErrorToast;
 
+    Callback loginCallback;
+    Callback registerCallback;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +34,60 @@ public class LoginScreen extends ActionBarActivity {
         registerFailedToast = Toast.makeText(this.getApplicationContext(), "Register failed!", Toast.LENGTH_SHORT);
         requestErrorToast = Toast.makeText(this.getApplicationContext(), "Error on Request!", Toast.LENGTH_SHORT);
         unknownErrorToast = Toast.makeText(this.getApplicationContext(), "Unknown error occured", Toast.LENGTH_SHORT);
+
+        loginCallback = new LoginCallback();
+        registerCallback = new RegisterCallback();
+    }
+
+    private class LoginCallback implements Callback{
+        @Override
+        public void callback(Requester requester) {
+            String response = requester.getLastMessage();
+            System.out.println("Response is " + response);
+
+            //wrong credentials
+            if (response.contains("does not exist")) {
+                loginBadCredentialsToast.show();
+            }
+            //request error
+            else if (response.contains("Error")) {
+                requestErrorToast.show();
+            }
+            //every other string should indicate correct credentials: start the main menu activity
+            else if (!(response.isEmpty())) {
+                loginSucceededToast.show();
+                loginSucceeded();
+            }
+            //unknown error
+            else {
+                unknownErrorToast.show();
+            }
+        }
+    }
+
+    private class RegisterCallback implements Callback{
+        @Override
+        public void callback(Requester requester) {
+            String response = requester.getLastMessage();
+            //System.out.println("Response is : " + response);
+
+            //username already exists
+            if (response.contains("exists")) {
+                registerFailedToast.show();
+            }
+            //registration succeeded
+            else if (response.contains("Success")) {
+                registerSucceededToast.show();
+            }
+            //request error
+            else if (response.contains("Error")) {
+                requestErrorToast.show();
+            }
+            //unknown error
+            else {
+                unknownErrorToast.show();
+            }
+        }
     }
 
 
@@ -84,27 +132,8 @@ public class LoginScreen extends ActionBarActivity {
 
         //add the request to queue
         Requester requester = Requester.getInstance(this.getApplicationContext());
-        requester.addRequest(url);
-        String response = requester.getLastMessage();
-        //System.out.println(response);
+        requester.addRequest(url,loginCallback);
 
-        //wrong credentials
-        if (response.contains("wrong")) {
-            loginBadCredentialsToast.show();
-        }
-        //request error
-        else if (response.contains("Error")) {
-            requestErrorToast.show();
-        }
-        //every other string should indicate correct credentials: start the main menu activity
-        else if (!(response.isEmpty())) {
-            loginSucceededToast.show();
-            loginSucceeded();
-        }
-        //unknown error
-        else {
-            unknownErrorToast.show();
-        }
     }
 
     public void register(View view) {
@@ -124,26 +153,7 @@ public class LoginScreen extends ActionBarActivity {
 
         //add the request to queue
         Requester requester = Requester.getInstance(this.getApplicationContext());
-        requester.addRequest(url);
-        String response = requester.getLastMessage();
-        //System.out.println(response);
-
-        //username already exists
-        if (response.contains("exists")) {
-            registerFailedToast.show();
-        }
-        //registration succeeded
-        else if (response.contains("Success")) {
-            registerSucceededToast.show();
-        }
-        //request error
-        else if (response.contains("Error")) {
-            requestErrorToast.show();
-        }
-        //unknown error
-        else {
-            unknownErrorToast.show();
-        }
+        requester.addRequest(url,registerCallback);
     }
 
     //starts the Main Menu activity
