@@ -78,7 +78,8 @@ public class VoteScreen extends ActionBarActivity{
                 vadapter.notifyDataSetChanged();
             }
         };
-
+        voteView.setOnItemClickListener(choiceClickedHandler);
+        
         String url = Requester.SERVERURL + "/location?lat=42.729781&lng=-73.679248";
         //add the request to queue
         Requester requester = Requester.getInstance(this.getApplicationContext());
