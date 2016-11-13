@@ -202,6 +202,10 @@ public class MainMenu extends ActionBarActivity /*implements LoaderManager.Loade
         editor.putString(getString(R.string.login_username), "");
         editor.putString(getString(R.string.login_password), "");
         editor.commit();
+        SharedPreferences GP = this.getSharedPreferences(getString(R.string.preference_group_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor e2 = GP.edit();
+        e2.putString(getString(R.string.group_key),"");
+        e2.commit();
 
         logoutToast.show();
         finish();
