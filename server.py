@@ -22,7 +22,7 @@ def get_mysql(row, table, column, value):
 @app.route('/login')
 def login():
     ret = {}
-    user = request.args.get('user')
+1    user = request.args.get('user')
     passwd = request.args.get('pass')
     cursor = mysql.connect().cursor()   
     cursor.execute("SELECT * FROM user WHERE username='" + user + "' AND password='" + passwd + "'")
@@ -30,11 +30,11 @@ def login():
     if data is None:
         return "The username and password combination does not exist."
     else:
-        cursor.execute("SELECT groupname, g.groupkey FROM groupmaster c, groupu g, user u WHERE g.groupkey = c.groupkey AND u.userid = c.userid")
+        cursor.execute("SELECT groupname, g.groupkey FROM groupmaster c, groupu g, user u WHERE g.groupkey = c.groupkey AND u.userid = c.userid AND u.username=" + user)
         group = cursor.fetchall()
         for x in group:
             ret[x[0]] = x[1]
-        cursor.execute("SELECT groupname, g.groupkey FROM groupjoined c, groupu g, user u WHERE g.groupkey = c.groupkey AND u.userid = c.userid")
+        cursor.execute("SELECT groupname, g.groupkey FROM groupjoined c, groupu g, user u WHERE g.groupkey = c.groupkey AND u.userid = c.userid AND u.username=" + user)
         group = cursor.fetchall()
         for x in group:
             ret[x[0]] = x[1]
