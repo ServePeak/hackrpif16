@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context=".GroupScreen">
+
+    <TextView android:id="@+id/group_screen_message"
+        android:text="@string/group_screen_message"
+        android:textSize="24dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Space android:id="@+id/group_screen_space"
+        android:layout_below="@+id/group_screen_message"
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+
+    <Button android:id="@+id/start_vote_button"
+        android:layout_below="@+id/group_screen_space"
+        android:layout_centerHorizontal="true"
+        android:text="Start Vote"
+        android:layout_width="110dp"
+        android:layout_height="40dp" />
+
+</RelativeLayout>
