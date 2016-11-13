@@ -4,6 +4,9 @@ import android.content.Context;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 /**
@@ -13,6 +16,8 @@ public class Requester {
     private static Requester instance;
     private RequestQueue queue;
     private static Context context;
+
+    private String lastMessage = "";
 
     private Requester(Context c) {
         context = c;
@@ -33,7 +38,36 @@ public class Requester {
         return queue;
     }
 
-    public <T> void addToRequestQueue(Request<T> req) {
-        getRequestQueue().add(req);
+    public void addRequest(String url) {
+        //Request a String response the url
+        StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            //called when a response is received
+            @Override
+            public void onResponse(String response) {
+                System.out.println(response);
+                setLastMessage(response);
+            }
+        }, new Response.ErrorListener() {
+            //called when there is an error on the request or no response
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println("Error on Request!");
+                setLastMessage("Error on Request!");
+            }
+        });
+
+        //Add the request to RequestQueue
+        queue.add(request);
+    }
+
+    //retrieves the last message, returns it, and resets it
+    public String getLastMessage() {
+        String ans = lastMessage;
+        lastMessage = "";
+        return ans;
+    }
+
+    private void setLastMessage(String s) {
+        lastMessage = s;
     }
 }

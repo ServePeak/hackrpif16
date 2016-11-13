@@ -19,10 +19,13 @@ import com.android.volley.toolbox.Volley;
 
 public class LoginScreen extends ActionBarActivity {
     Toast loginSucceededToast;
-    Toast loginBadCredentials;
-    Toast loginEmptyFields;
-    Toast loginFailedToast;
-    Toast unknownError;
+    Toast loginBadCredentialsToast;
+    Toast loginEmptyFieldsToast;
+    Toast requestFailedToast;
+    Toast registerSucceededToast;
+    Toast registerFailedToast;
+    Toast requestErrorToast;
+    Toast unknownErrorToast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,10 +33,13 @@ public class LoginScreen extends ActionBarActivity {
         setContentView(R.layout.activity_login_screen);
 
         loginSucceededToast = Toast.makeText(this.getApplicationContext(), "Login Succeeded!", Toast.LENGTH_SHORT);
-        loginBadCredentials = Toast.makeText(this.getApplicationContext(), "Username or Password is wrong", Toast.LENGTH_SHORT);
-        loginEmptyFields = Toast.makeText(this.getApplicationContext(), "Username or Password field is empty", Toast.LENGTH_SHORT);
-        loginFailedToast = Toast.makeText(this.getApplicationContext(), "Error on Login Request!", Toast.LENGTH_SHORT);
-        unknownError = Toast.makeText(this.getApplicationContext(), "Unknown error occured", Toast.LENGTH_SHORT);
+        loginBadCredentialsToast = Toast.makeText(this.getApplicationContext(), "Username or Password is wrong", Toast.LENGTH_SHORT);
+        loginEmptyFieldsToast = Toast.makeText(this.getApplicationContext(), "Username or Password field is empty", Toast.LENGTH_SHORT);
+        requestFailedToast = Toast.makeText(this.getApplicationContext(), "Error on Server Request!", Toast.LENGTH_SHORT);
+        registerSucceededToast = Toast.makeText(this.getApplicationContext(), "Successfully registered!", Toast.LENGTH_SHORT);
+        registerFailedToast = Toast.makeText(this.getApplicationContext(), "Register failed!", Toast.LENGTH_SHORT);
+        requestErrorToast = Toast.makeText(this.getApplicationContext(), "Error on Request!", Toast.LENGTH_SHORT);
+        unknownErrorToast = Toast.makeText(this.getApplicationContext(), "Unknown error occured", Toast.LENGTH_SHORT);
     }
 
 
@@ -69,45 +75,75 @@ public class LoginScreen extends ActionBarActivity {
 
         //don't do anything if the username or password is empty
         if (loginUsername.isEmpty() || loginPassword.isEmpty()) {
-            loginEmptyFields.show();
+            loginEmptyFieldsToast.show();
             return;
         }
 
         //Get a RequestQueue, create the url from the inputted username and password
-        RequestQueue queue = Requester.getInstance(this.getApplicationContext()).getRequestQueue();
-        String url = "http://762ffcaf.ngrok.io/api?user=" + loginUsername + "&pass=" + loginPassword;
+        String url = "http://762ffcaf.ngrok.io/login?user=" + loginUsername + "&pass=" + loginPassword;
 
-        //Request a String response the url
-        StringRequest loginRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-            //called when a response is received
-            @Override
-            public void onResponse(String response) {
-                System.out.println(response);
-                //bad credentials
-                if (response.contains("wrong")) {
-                    loginBadCredentials.show();
-                }
-                //correct credentials: start the main menu activity
-                else if (response.contains("success")) {
-                    loginSucceededToast.show();
-                    loginSucceeded();
-                }
-                //unknown error
-                else {
-                    unknownError.show();
-                }
-            }
-        }, new Response.ErrorListener() {
-            //called when there is an error on the request or no response
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                loginFailedToast.show();
-                System.out.println("Error on Login Request!");
-            }
-        });
+        //add the request to queue
+        Requester requester = Requester.getInstance(this.getApplicationContext());
+        requester.addRequest(url);
+        String response = requester.getLastMessage();
+        //System.out.println(response);
 
-        //Add the request to RequestQueue
-        queue.add(loginRequest);
+        //wrong credentials
+        if (response.contains("wrong")) {
+            loginBadCredentialsToast.show();
+        }
+        //request error
+        else if (response.contains("Error")) {
+            requestErrorToast.show();
+        }
+        //every other string should indicate correct credentials: start the main menu activity
+        else if (!(response.isEmpty())) {
+            loginSucceededToast.show();
+            loginSucceeded();
+        }
+        //unknown error
+        else {
+            unknownErrorToast.show();
+        }
+    }
+
+    public void register(View view) {
+        EditText temp1 = (EditText)findViewById(R.id.username_input);
+        EditText temp2 = (EditText)findViewById(R.id.password_input);
+        String registerUsername = temp1.getText().toString();
+        String registerPassword = temp2.getText().toString();
+
+        //don't do anything if the username or password is empty
+        if (registerUsername.isEmpty() || registerPassword.isEmpty()) {
+            loginEmptyFieldsToast.show();
+            return;
+        }
+
+        //Get a RequestQueue, create the url from the inputted username and password
+        String url = "http://762ffcaf.ngrok.io/register?user=" + registerUsername + "&pass=" + registerPassword;
+
+        //add the request to queue
+        Requester requester = Requester.getInstance(this.getApplicationContext());
+        requester.addRequest(url);
+        String response = requester.getLastMessage();
+        //System.out.println(response);
+
+        //username already exists
+        if (response.contains("exists")) {
+            registerFailedToast.show();
+        }
+        //registration succeeded
+        else if (response.contains("Success")) {
+            registerSucceededToast.show();
+        }
+        //request error
+        else if (response.contains("Error")) {
+            requestErrorToast.show();
+        }
+        //unknown error
+        else {
+            unknownErrorToast.show();
+        }
     }
 
     //starts the Main Menu activity
