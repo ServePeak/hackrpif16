@@ -1,7 +1,6 @@
 package chupalika.pleasepickaplace;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -65,11 +64,10 @@ public class VoteScreen extends ActionBarActivity{
         voteView.setAdapter(vadapter);
         voteClickedHandler = new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView parent, View v, int position, long id) {
-                if(votes.size() < 3) {
                     votes.add(restaurants.remove(position));
                     adapter.notifyDataSetChanged();
                     vadapter.notifyDataSetChanged();
-                }
+
             }
         };
         listView.setOnItemClickListener(voteClickedHandler);
@@ -86,9 +84,8 @@ public class VoteScreen extends ActionBarActivity{
         public void callback(Requester requester) {
             String response = requester.getLastMessage();
             if(response.equals("Success")){
-                if(votes.size() > 0){
                     submitVote();
-                }
+
             }else {
                 unknownError.show();
             }
@@ -194,8 +191,10 @@ public class VoteScreen extends ActionBarActivity{
     private void submitVote(){
         if(votes.size() == 0){
             voteConfirmed.show();
-            Intent intent = new Intent(this, MainMenu.class);
-            startActivity(intent);
+            finish();
+            return;
+            //Intent intent = new Intent(this, MainMenu.class);
+            //startActivity(intent);
         }
         SharedPreferences sp = this.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         String user = sp.getString(getString(R.string.login_username), "");
