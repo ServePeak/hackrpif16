@@ -46,7 +46,7 @@ public class VoteScreen extends ActionBarActivity{
         setContentView(R.layout.activity_vote_screen);
 
         i = 0;
-        threeError = Toast.makeText(this.getApplicationContext(),"Three error occured", Toast.LENGTH_SHORT);
+        threeError = Toast.makeText(this.getApplicationContext(),"Please select three restaurants", Toast.LENGTH_SHORT);
         unknownError = Toast.makeText(this.getApplicationContext(), "Unknown error occured", Toast.LENGTH_SHORT);
         parseError = Toast.makeText(this.getApplicationContext(), "Parse error occured", Toast.LENGTH_SHORT);
         voteConfirmed = Toast.makeText(this.getApplicationContext(), "Vote confirmed", Toast.LENGTH_SHORT);
