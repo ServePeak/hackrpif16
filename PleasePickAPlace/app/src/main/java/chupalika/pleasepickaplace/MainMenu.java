@@ -9,8 +9,6 @@ import android.util.JsonReader;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -28,9 +26,10 @@ public class MainMenu extends ActionBarActivity{
 
     Callback getGroupCallback;
     ArrayList<Group> groupsList;
+    /*
     ArrayAdapter<Group> adapter;
     ListView lw;
-
+    */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,11 +44,24 @@ public class MainMenu extends ActionBarActivity{
         logoutToast = Toast.makeText(this.getApplicationContext(), "Logged out", Toast.LENGTH_SHORT);
 
         getGroupCallback = new GroupCallback();
+
+        // TODO: show the groups on the main page
+                    /* Probably like
+                        Group name 1            <button> View Group </button>
+                        Group name 2            <button> View Group </button>
+                        etc.
+
+                        Probably change the layout of the page so that it's
+                        <Create Group button> <Join Group Button>
+                        <list of groups> (if user is not in any groups, show a message that tells him to create/join one)
+                    */
+
         groupsList = new ArrayList<Group>();
+        /*
         lw = (ListView)findViewById(R.id.group_list);
         adapter = new ArrayAdapter<Group>(this,R.layout.group_item,R.id.a_group_item,groupsList);
         lw.setAdapter(adapter);
-
+        */
         String url = Requester.SERVERURL + "/login?user=" + user + "&pass=" + pw;
         //add the request to queue
         Requester requester = Requester.getInstance(this.getApplicationContext());
@@ -65,17 +77,6 @@ public class MainMenu extends ActionBarActivity{
             if (response.contains("{")) {
                 try {
                     parseInput(response);
-
-                    // TODO: show the groups on the main page
-                    /* Probably like
-                        Group name 1            <button> View Group </button>
-                        Group name 2            <button> View Group </button>
-                        etc.
-
-                        Probably change the layout of the page so that it's
-                        <Create Group button> <Join Group Button>
-                        <list of groups> (if user is not in any groups, show a message that tells him to create/join one)
-                    */
 
                 }catch(IOException e){
                     unknownError.show();
@@ -107,7 +108,7 @@ public class MainMenu extends ActionBarActivity{
             String name = jr.nextName();
             String key = jr.nextString();
             groupsList.add(new Group(name, key));
-            adapter.notifyDataSetChanged();
+            //adapter.notifyDataSetChanged();
         }
         jr.endObject();
     }
