@@ -21,3 +21,5 @@ MySQL normalization.
 
 ## What's next
 Fully fleshing it out so we ourselves can use it
+
+Made by [Alvin Leung](https://github.com/aleung013), [Brandon Ip](https://github.com/Chupalika), [Tiara Tan](https://github.com/TiaraIsTan), and [Jia Sen Wu](https://github.com/ServePeak)
