@@ -18,6 +18,7 @@ public class Group {
 
         //TODO: API call to get members in this group
     }
+    public String getKey() {return key;}
 
     public int numMembers(){
         return members.size();
