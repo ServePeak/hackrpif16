@@ -32,7 +32,7 @@ public class VoteScreen extends ActionBarActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_group_screen);
+        setContentView(R.layout.activity_vote_screen);
 
         unknownError = Toast.makeText(this.getApplicationContext(), "Unknown error occured", Toast.LENGTH_SHORT);
         voteCallback = new VoteCallback();
@@ -41,7 +41,7 @@ public class VoteScreen extends ActionBarActivity{
 
         restaurants = new ArrayList<Restaurant>();
         adapter = new ArrayAdapter<Restaurant>(this, R.layout.vote_option_item, R.id.a_vote_option, restaurants);
-        listView = (ListView)findViewById(R.id.vote_options);
+        listView = (ListView) findViewById(R.id.vote_options);
         listView.setAdapter(adapter);
 
         String url = Requester.SERVERURL + "/location?lat=42.729781&lng=-73.679248";
@@ -65,6 +65,7 @@ public class VoteScreen extends ActionBarActivity{
             if (response.contains("{")) {
                 try {
                     parseInput(response);
+                    System.out.println("Restaurants: " + restaurants + " " + restaurants.size());
 
                 }catch(IOException e){
                     unknownError.show();
@@ -90,6 +91,7 @@ public class VoteScreen extends ActionBarActivity{
 
     private void readRestaurants(JsonReader jr) throws IOException{
         String id = "";
+        System.out.println("Reading Restaurants");
         jr.beginObject();
         while(jr.hasNext()){
             id = jr.nextName();
@@ -108,14 +110,17 @@ public class VoteScreen extends ActionBarActivity{
                 rating = jr.nextString();
             else if (temp.equals("distance"))
                 distance = jr.nextString();
-            else if (temp.equals("cost"))
-                price = jr.nextString();
+            else if (temp.equals("cost")) {
+                try{
+                    jr.nextNull();
+                }catch(Exception e){
+                    price = jr.nextString();
+                }
+            }
             else if (temp.equals("location"))
                 location = jr.nextString();
             else if (temp.equals("name"))
                 name = jr.nextString();
-            else if (temp.equals("distance"))
-                distance = jr.nextString();
         }
         jr.endObject();
         restaurants.add(new Restaurant(id,name,rating,location,price,desc,distance));
