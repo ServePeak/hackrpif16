@@ -50,10 +50,6 @@ public class MainMenu extends ActionBarActivity{
                         Group name 1            <button> View Group </button>
                         Group name 2            <button> View Group </button>
                         etc.
-
-                        Probably change the layout of the page so that it's
-                        <Create Group button> <Join Group Button>
-                        <list of groups> (if user is not in any groups, show a message that tells him to create/join one)
                     */
 
         groupsList = new ArrayList<Group>();
@@ -138,17 +134,15 @@ public class MainMenu extends ActionBarActivity{
 
 
     // Called when the user click create group
-    private void createGroup(View view){
+    public void createGroup(View view){
         //TODO: createGroup
-        //Create a textbox (popup?) for user to enter group name
-        //Make a /makegroup API call
+
     }
 
     // Called when the user clicks join group
-    private void joinGroup(View view){
+    public void joinGroup(View view){
         //TODO: joinGroup
-        //Create a textbox (popup?) for user to enter group key
-        //Make a /joingroup API call
+
     }
 
     // Called when group create is successfully returned
