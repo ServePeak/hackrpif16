@@ -88,18 +88,37 @@ public class VoteScreen extends ActionBarActivity{
     }
 
     private void readRestaurants(JsonReader jr) throws IOException{
-        //TODO: fix parsing
+        String id = "";
         jr.beginObject();
         while(jr.hasNext()){
-            String name = jr.nextName();
-            String rating = jr.nextString();
-            String location = jr.nextString();
-            String price = jr.nextString();
-            String desc = jr.nextString();
-            restaurants.add(new Restaurant(name, rating, location, price, desc));
-            adapter.notifyDataSetChanged();
+            id = jr.nextName();
+            readARestaurant(jr,id);
         }
         jr.endObject();
+    }
+    private void readARestaurant(JsonReader jr, String id) throws IOException{
+        String name ="", rating = "", location="", distance="", price="", desc="", temp ="";
+        jr.beginObject();
+        while(jr.hasNext()){
+            temp = jr.nextName();
+            if(temp.equals("rating"))
+                rating = jr.nextString();
+            else if (temp.equals("description"))
+                rating = jr.nextString();
+            else if (temp.equals("distance"))
+                distance = jr.nextString();
+            else if (temp.equals("cost"))
+                price = jr.nextString();
+            else if (temp.equals("location"))
+                location = jr.nextString();
+            else if (temp.equals("name"))
+                name = jr.nextString();
+            else if (temp.equals("distance"))
+                distance = jr.nextString();
+        }
+        jr.endObject();
+        restaurants.add(new Restaurant(id,name,rating,location,price,desc,distance));
+        adapter.notifyDataSetChanged();
     }
 
     // Called when user presses Vote
