@@ -25,16 +25,45 @@ public class MainMenu extends ActionBarActivity{
     Toast unknownError;
     Toast logoutToast;
 
+    Callback getGroupCallback;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
+        SharedPreferences sp = this.getSharedPreferences(getString(R.string.preference_file_key),Context.MODE_PRIVATE);
+        String user = sp.getString(getString(R.string.login_username),"");
+        String pw = sp.getString(getString(R.string.login_password),"");
+
         groupCreateSuccess = Toast.makeText(this.getApplicationContext(),"Group created successfully",Toast.LENGTH_SHORT);
         unknownError = Toast.makeText(this.getApplicationContext(), "Unknown error occured", Toast.LENGTH_SHORT);
         logoutToast = Toast.makeText(this.getApplicationContext(), "Logged out", Toast.LENGTH_SHORT);
+
+        getGroupCallback = new GroupCallback();
+
+        String url = "http://762ffcaf.ngrok.io/login?user=" + user + "&pass=" + pw;
+
+        //add the request to queue
+        Requester requester = Requester.getInstance(this.getApplicationContext());
+        requester.addRequest(url,getGroupCallback);
     }
 
+    private class GroupCallback implements Callback{
+        @Override
+        public void callback(Requester requester) {
+            String response = requester.getLastMessage();
+
+            //squiggly braces indicate groups were returned
+            if (response.contains("{")) {
+                //TODO: Parse the data to see check group
+            }
+            //unknown error
+            else {
+                unknownError.show();
+            }
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
