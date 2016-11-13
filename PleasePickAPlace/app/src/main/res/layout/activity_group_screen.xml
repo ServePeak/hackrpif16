@@ -42,12 +42,39 @@
         android:layout_width="match_parent"
         android:layout_height="40dp" />
 
-    <Button android:id="@+id/start_vote_button"
-        android:layout_below="@+id/group_key_message"
-        android:layout_centerHorizontal="true"
-        android:text="Vote Now"
-        android:layout_width="110dp"
+    <LinearLayout android:id="@+id/group_screen_button_row"
+        android:layout_width="200dp"
         android:layout_height="40dp"
-        android:onClick="startVote"/>
+        android:orientation="horizontal"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/group_key_message">
+
+        <Button android:id="@+id/start_vote_button"
+            android:layout_centerHorizontal="true"
+            android:text="Vote Now"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:onClick="startVote"/>
+
+        <Button android:id="@+id/end_vote_button"
+            android:layout_centerHorizontal="true"
+            android:text="End Vote"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:onClick="endVote"/>
+
+    </LinearLayout>
+
+    <Space android:id="@+id/group_screen_space"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_below="@+id/group_screen_button_row"/>
+
+    <TextView android:id="@+id/group_screen_winner"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@+id/group_screen_space"
+        android:layout_centerHorizontal="true"
+        android:textSize="24dp"/>
 
 </RelativeLayout>

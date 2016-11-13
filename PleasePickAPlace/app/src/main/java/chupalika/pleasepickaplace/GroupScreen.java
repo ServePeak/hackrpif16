@@ -19,7 +19,9 @@ import java.util.Arrays;
 public class GroupScreen extends ActionBarActivity{
     Callback leaderCallback;
     Callback memberCallback;
+    Callback endVoteCallback;
     String groupName;
+    String groupKey;
 
     ArrayList<String> members;
 
@@ -35,8 +37,11 @@ public class GroupScreen extends ActionBarActivity{
 
         leaderCallback = new LeaderCallback();
         memberCallback = new MemberCallback();
+        endVoteCallback = new EndVoteCallback();
+
         SharedPreferences sp = this.getSharedPreferences(getString(R.string.preference_group_key), Context.MODE_PRIVATE);
-        String groupKey = sp.getString(getString(R.string.group_key),"");
+        groupKey = sp.getString(getString(R.string.group_key),"");
+
         String url = Requester.SERVERURL + "/getleader?group=" + groupKey;
         String url3 = Requester.SERVERURL + "/getmembers?group=" + groupKey;
         Requester requester = Requester.getInstance(this.getApplicationContext());
@@ -120,6 +125,21 @@ public class GroupScreen extends ActionBarActivity{
     public void startVote(View view){
         Intent intent = new Intent(this, VoteScreen.class);
         startActivity(intent);
+    }
 
+    public void endVote(View view) {
+        String url = Requester.SERVERURL + "/prasevotes?group=" + groupKey;
+        Requester requester = Requester.getInstance(getApplicationContext());
+        requester.addRequest(url, endVoteCallback);
+    }
+
+    private class EndVoteCallback implements Callback {
+        @Override
+        public void callback(Requester requester) {
+            String response = requester.getLastMessage();
+
+            TextView textView = (TextView)findViewById(R.id.group_screen_winner);
+            textView.setText("Winner:" + response);
+        }
     }
 }
