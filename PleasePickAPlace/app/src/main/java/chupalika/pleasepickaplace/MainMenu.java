@@ -95,7 +95,7 @@ public class MainMenu extends ActionBarActivity{
     }
 
     private void logout() {
-        SharedPreferences SP = this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences SP = this.getSharedPreferences(getString(R.string.preference_file_key),Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = SP.edit();
         editor.putString(getString(R.string.login_username), "");
         editor.putString(getString(R.string.login_password), "");

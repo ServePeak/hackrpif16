@@ -41,10 +41,10 @@ public class LoginScreen extends ActionBarActivity {
         loginCallback = new LoginCallback();
         registerCallback = new RegisterCallback();
 
-        SharedPreferences SP = this.getPreferences(Context.MODE_PRIVATE);
-        String usernamePref = SP.getString(getString(R.string.login_username), "NOTLOGGEDIN");
-        String passwordPref = SP.getString(getString(R.string.login_password), "NOTLOGGEDIN");
-        if (usernamePref == "NOTLOGGEDIN" || passwordPref == "NOTLOGGEDIN") {}
+        SharedPreferences SP = this.getSharedPreferences(getString(R.string.preference_file_key),Context.MODE_PRIVATE);
+        String usernamePref = SP.getString(getString(R.string.login_username), "");
+        String passwordPref = SP.getString(getString(R.string.login_password), "");
+        if (usernamePref.isEmpty() || passwordPref.isEmpty()) {}
         else {
             login(usernamePref, passwordPref);
         }
@@ -132,7 +132,7 @@ public class LoginScreen extends ActionBarActivity {
             return;
         }
 
-        SharedPreferences SP = this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences SP = this.getSharedPreferences(getString(R.string.preference_file_key),Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = SP.edit();
         editor.putString(getString(R.string.login_username), loginUsername);
         editor.putString(getString(R.string.login_password), loginPassword);
