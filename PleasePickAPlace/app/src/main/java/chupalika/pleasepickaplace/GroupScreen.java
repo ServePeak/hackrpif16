@@ -24,7 +24,6 @@ public class GroupScreen extends ActionBarActivity{
 
         SharedPreferences sp = this.getSharedPreferences(getString(R.string.preference_group_key), Context.MODE_PRIVATE);
         String groupKey = sp.getString(getString(R.string.group_key),"");
-        //TODO: If group leader, show call vote
         String url = Requester.SERVERURL + "/getleader?" + groupKey;
 
         Requester requester = Requester.getInstance(this.getApplicationContext());
