@@ -34,8 +34,8 @@ public class GroupScreen extends ActionBarActivity{
         memberCallback = new MemberCallback();
         SharedPreferences sp = this.getSharedPreferences(getString(R.string.preference_group_key), Context.MODE_PRIVATE);
         String groupKey = sp.getString(getString(R.string.group_key),"");
-        String url = Requester.SERVERURL + "/getleader?" + groupKey;
-        String url3 = Requester.SERVERURL + "/getmembers?" + groupKey;
+        String url = Requester.SERVERURL + "/getleader?group=" + groupKey;
+        String url3 = Requester.SERVERURL + "/getmembers?group=" + groupKey;
         Requester requester = Requester.getInstance(this.getApplicationContext());
         requester.addRequest(url,leaderCallback);
         requester.addRequest(url3,memberCallback);
@@ -59,13 +59,23 @@ public class GroupScreen extends ActionBarActivity{
             String response = requester.getLastMessage();
             if (response.isEmpty()){
 
-            } else if (response.contains("{")){
-                response = response.substring(1,response.length() - 1);
+            } else{// if (response.contains("{")){
+                //response = response.substring(1,response.length() - 1);
                 SharedPreferences sp = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
                 String user = sp.getString(getString(R.string.group_key),"");
                 if(user.equals(response)){
                     Button svote = (Button)findViewById(R.id.start_vote_button);
                     svote.setVisibility(View.VISIBLE);
+
+
+                    TextView gc = (TextView) findViewById(R.id.group_key_message);
+                    SharedPreferences gk = getSharedPreferences(getString(R.string.preference_group_key),Context.MODE_PRIVATE);
+                    String kc = gk.getString(getString(R.string.group_key),"");
+                    gc.setText("Key code: " + kc);
+
+                    String url3 = Requester.SERVERURL + "/getmembers?group=" + kc;
+                    Requester requesters = Requester.getInstance(getApplicationContext());
+                    requesters.addRequest(url3,memberCallback);
                 }
             }
         }

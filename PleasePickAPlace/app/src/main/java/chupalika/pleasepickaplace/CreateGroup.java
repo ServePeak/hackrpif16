@@ -16,7 +16,6 @@ import android.widget.Toast;
 
 public class CreateGroup extends ActionBarActivity{
     Callback cgCallback;
-    Callback nameCallback;
     Toast createSuccessful;
     Toast unknownError;
     Toast invalidKeyToast;
@@ -31,7 +30,6 @@ public class CreateGroup extends ActionBarActivity{
         unknownError = Toast.makeText(this.getApplicationContext(), "Unknown error occured", Toast.LENGTH_SHORT);
 
         cgCallback = new CreateGroupCallback();
-        nameCallback = new NameCallback();
     }
 
     private class CreateGroupCallback implements Callback{
@@ -65,7 +63,7 @@ public class CreateGroup extends ActionBarActivity{
     }
 
     private void createSuccessful(String groupkey){
-
+        Intent intent = new Intent(this, GroupScreen.class);
         //Write to shared preference the current group
 
         SharedPreferences SP = this.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
@@ -75,26 +73,9 @@ public class CreateGroup extends ActionBarActivity{
 
         createSuccessful.show();
 
-        String url = Requester.SERVERURL + "/getgroupname?group=" + groupkey;
-        Requester requester = Requester.getInstance(this.getApplicationContext());
-        requester.addRequest(url,nameCallback);
-    }
-
-    private class NameCallback implements Callback{
-        @Override
-        public void callback(Requester requester){
-            String response = requester.getLastMessage();
-            if(!response.isEmpty()){
-                goToGroupScreen(response);
-            }
-        }
-    }
-
-    private void goToGroupScreen(String gName){
-        Intent intent = new Intent(this,GroupScreen.class);
-        intent.putExtra(MainMenu.EXTRA_GROUP_NAME, gName);
         startActivity(intent);
     }
+
     private void createFailed(){
         invalidKeyToast.show();
     }

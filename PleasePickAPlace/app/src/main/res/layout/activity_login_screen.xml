@@ -60,6 +60,6 @@
         android:layout_gravity="center"
         android:src="@drawable/logo"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
+        android:layout_centerHorizontal="true"/>
 
 </RelativeLayout>
