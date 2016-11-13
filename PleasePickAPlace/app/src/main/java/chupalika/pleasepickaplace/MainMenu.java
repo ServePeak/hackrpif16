@@ -5,16 +5,15 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.JsonReader;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.ArrayList;
 
 /**
  * Created by aleung013 on 11/12/2016.
@@ -26,6 +25,7 @@ public class MainMenu extends ActionBarActivity{
     Toast logoutToast;
 
     Callback getGroupCallback;
+    ArrayList<Group> groupsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,9 +41,9 @@ public class MainMenu extends ActionBarActivity{
         logoutToast = Toast.makeText(this.getApplicationContext(), "Logged out", Toast.LENGTH_SHORT);
 
         getGroupCallback = new GroupCallback();
+        groupsList = new ArrayList<Group>();
 
         String url = "http://762ffcaf.ngrok.io/login?user=" + user + "&pass=" + pw;
-
         //add the request to queue
         Requester requester = Requester.getInstance(this.getApplicationContext());
         requester.addRequest(url,getGroupCallback);
@@ -56,13 +56,54 @@ public class MainMenu extends ActionBarActivity{
 
             //squiggly braces indicate groups were returned
             if (response.contains("{")) {
-                //TODO: Parse the data to see check group
+                try {
+                    groupsList = parseInput(response);
+                    System.out.println("groups joined: " + groupsList.size());
+                    // TODO: FOR BRANDON instead of printing # of groups, show the groups on the main page
+                    /* Probably like
+                        Group name 1            <button> View Group </button>
+                        Group name 2            <button> View Group </button>
+                        etc.
+
+                        Probably change the layout of the page so that it's
+                        <Create Group button> <Join Group Button>
+                        <list of groups> (if user is not in any groups, show a message that tells him to create/join one)
+                    */
+
+                }catch(IOException e){
+                    unknownError.show();
+                }
             }
             //unknown error
             else {
                 unknownError.show();
             }
         }
+    }
+
+    private ArrayList<Group> parseInput(String response) throws IOException {
+        JsonReader jr = new JsonReader(new StringReader(response));
+        try{
+            return readGroups(jr);
+        }catch(Exception e){
+            unknownError.show();
+        }finally{
+            jr.close();
+        }
+        return null;
+    }
+
+    private ArrayList<Group> readGroups(JsonReader jr) throws IOException{
+        ArrayList<Group> groups = new ArrayList<Group>();
+
+        jr.beginObject();
+        while(jr.hasNext()){
+            String name = jr.nextName();
+            String key = jr.nextString();
+            groups.add(new Group(name, key));
+        }
+        jr.endObject();
+        return groups;
     }
 
     @Override
@@ -89,33 +130,11 @@ public class MainMenu extends ActionBarActivity{
     }
 
     // Called when the user click create group
-    public void createGroup(View view){
-        //Get a RequestQueue, create the url from the inputted username and password
-        RequestQueue queue = Requester.getInstance(this.getApplicationContext()).getRequestQueue();
-        System.out.println("Creating group for user");
-        String url = "http://762ffcaf.ngrok.io/api?user="; // TODO: edit this to create group api call
+    private void createGroup(View view){
 
-        StringRequest groupRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                System.out.println("Got a response");
-                if (!response.isEmpty()) {
-                    groupCreateSuccess.show();
-                    groupCreateSuccess();
-                }else{
-                    unknownError.show();
-                }
-            }
-        }, new Response.ErrorListener(){
-            @Override
-            public void onErrorResponse(VolleyError error){
-                System.out.println("Am i in here?");
-                unknownError.show();
-            }
-        });
-
-        queue.add(groupRequest);
     }
+
+    // Called when the user clicks join group
 
     // Called when group create is successfully returned
     private void groupCreateSuccess(){
