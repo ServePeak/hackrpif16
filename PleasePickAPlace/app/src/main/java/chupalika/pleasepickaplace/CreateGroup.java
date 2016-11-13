@@ -94,7 +94,9 @@ public class CreateGroup extends ActionBarActivity{
         Intent intent = new Intent(this,GroupScreen.class);
         intent.putExtra(MainMenu.EXTRA_GROUP_NAME, gName);
         startActivity(intent);
+        finish();
     }
+
     private void createFailed(){
         invalidKeyToast.show();
     }

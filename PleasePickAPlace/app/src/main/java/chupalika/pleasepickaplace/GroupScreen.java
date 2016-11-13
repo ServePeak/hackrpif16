@@ -39,7 +39,7 @@ public class GroupScreen extends ActionBarActivity{
         memberCallback = new MemberCallback();
         endVoteCallback = new EndVoteCallback();
 
-        SharedPreferences sp = this.getSharedPreferences(getString(R.string.preference_group_key), Context.MODE_PRIVATE);
+        SharedPreferences sp = this.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         groupKey = sp.getString(getString(R.string.group_key),"");
 
         String url = Requester.SERVERURL + "/getleader?group=" + groupKey;
@@ -128,7 +128,7 @@ public class GroupScreen extends ActionBarActivity{
     }
 
     public void endVote(View view) {
-        String url = Requester.SERVERURL + "/prasevotes?group=" + groupKey;
+        String url = Requester.SERVERURL + "/parsevotes?group=" + groupKey;
         Requester requester = Requester.getInstance(getApplicationContext());
         requester.addRequest(url, endVoteCallback);
     }
@@ -139,7 +139,7 @@ public class GroupScreen extends ActionBarActivity{
             String response = requester.getLastMessage();
 
             TextView textView = (TextView)findViewById(R.id.group_screen_winner);
-            textView.setText("Winner:" + response);
+            textView.setText("Winner: " + response);
         }
     }
 }

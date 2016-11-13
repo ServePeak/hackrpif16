@@ -20,6 +20,8 @@ public class JoinGroup extends ActionBarActivity{
     Toast unknownError;
     Toast invalidKeyToast;
 
+    String keyCode = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,8 +42,8 @@ public class JoinGroup extends ActionBarActivity{
                 joinFailed();
             }
             else if(!response.isEmpty()) {
-                String groupkey = response.substring(1, response.indexOf(':'));
-                joinSuccessful(groupkey);
+                String groupname = response.substring(2, response.indexOf(':')-1);
+                joinSuccessful(groupname);
             }
             else{
                 unknownError.show();
@@ -55,7 +57,7 @@ public class JoinGroup extends ActionBarActivity{
         String user = sp.getString(getString(R.string.login_username),"");
 
         EditText temp1 = (EditText)findViewById(R.id.group_key_input);
-        String keyCode = temp1.getText().toString();
+        keyCode = temp1.getText().toString();
         System.out.println(user + "," + keyCode);
         String url = Requester.SERVERURL + "/joingroup?user=" + user + "&group=" + keyCode;
 
@@ -64,18 +66,23 @@ public class JoinGroup extends ActionBarActivity{
         requester.addRequest(url,jgCallback);
     }
 
-    private void joinSuccessful(String groupkey){
+    private void joinSuccessful(String groupname) {
         Intent intent = new Intent(this, GroupScreen.class);
         //Write to shared preference the current group
 
         SharedPreferences SP = this.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = SP.edit();
-        editor.putString(getString(R.string.group_key),groupkey);
+        editor.putString(getString(R.string.group_name), groupname);
+        editor.putString(getString(R.string.group_key), keyCode);
         editor.commit();
 
         joinSuccessful.show();
 
+        intent.putExtra(MainMenu.EXTRA_GROUP_NAME, groupname);
         startActivity(intent);
+
+        startActivity(intent);
+        finish();
     }
 
     private void joinFailed(){
