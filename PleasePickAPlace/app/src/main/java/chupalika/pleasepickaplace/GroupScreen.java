@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 /**
@@ -67,9 +66,6 @@ public class GroupScreen extends ActionBarActivity{
                 String user = sp.getString(getString(R.string.login_username),"");
                 //System.out.println("User: " + user);
                 if(user.contains(response)){
-                    //System.out.println("You are the leader!");
-                    Button svote = (Button)findViewById(R.id.start_vote_button);
-                    svote.setVisibility(View.VISIBLE);
 
                     TextView gc = (TextView) findViewById(R.id.group_key_message);
                     SharedPreferences gk = getSharedPreferences(getString(R.string.preference_group_key),Context.MODE_PRIVATE);
@@ -101,5 +97,11 @@ public class GroupScreen extends ActionBarActivity{
         int id = item.getItemId();
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void startVote(View view){
+        Intent intent = new Intent(this, VoteScreen.class);
+        startActivity(intent);
+
     }
 }

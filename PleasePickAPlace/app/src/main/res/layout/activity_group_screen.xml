@@ -45,9 +45,9 @@
     <Button android:id="@+id/start_vote_button"
         android:layout_below="@+id/group_key_message"
         android:layout_centerHorizontal="true"
-        android:text="Start Vote"
+        android:text="Vote Now"
         android:layout_width="110dp"
         android:layout_height="40dp"
-        android:visibility="gone"/>
+        android:onClick="startVote"/>
 
 </RelativeLayout>

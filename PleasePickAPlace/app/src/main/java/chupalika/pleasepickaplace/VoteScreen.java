@@ -24,7 +24,7 @@ public class VoteScreen extends ActionBarActivity{
     ArrayAdapter<Restaurant> adapter;
     ListView listView;
 
-    Toast unknownError = Toast.makeText(this.getApplicationContext(), "Unknown error occured", Toast.LENGTH_SHORT);
+    Toast unknownError;
 
     Callback restaurantsCallback;
     Callback voteCallback;
@@ -34,6 +34,7 @@ public class VoteScreen extends ActionBarActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_screen);
 
+        unknownError = Toast.makeText(this.getApplicationContext(), "Unknown error occured", Toast.LENGTH_SHORT);
         voteCallback = new VoteCallback();
         restaurantsCallback = new RestaurantsCallback();
         //TODO: Need some method for user to reorder their ranking on the screen (drag/drop? Prompts for first second third and use back button to undo?)
