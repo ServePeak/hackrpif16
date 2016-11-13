@@ -18,8 +18,9 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".MainMenu">
-        </activity>
+        <activity android:name=".MainMenu"/>
+
+        <activity android:name=".GroupScreen"/>
 
     </application>
 

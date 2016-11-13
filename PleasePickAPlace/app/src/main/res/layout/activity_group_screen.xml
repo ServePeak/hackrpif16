@@ -11,7 +11,7 @@
     tools:context=".GroupScreen">
 
     <TextView android:id="@+id/group_screen_message"
-        android:text="@string/group_screen_message"
+        android:text=""
         android:textSize="24dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

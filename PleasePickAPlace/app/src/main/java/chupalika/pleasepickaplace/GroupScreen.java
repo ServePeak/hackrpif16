@@ -1,12 +1,14 @@
 package chupalika.pleasepickaplace;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 /**
  * Created by aleung013 on 11/12/2016.
@@ -14,11 +16,17 @@ import android.widget.Button;
 
 public class GroupScreen extends ActionBarActivity{
     Callback leaderCallback;
+    String groupName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_screen);
+
+        Intent intent = getIntent();
+        groupName = intent.getStringExtra(MainMenu.EXTRA_GROUP_NAME);
+        TextView textView = (TextView)findViewById(R.id.group_screen_message);
+        textView.setText("Welcome to " + groupName + "!");
 
         leaderCallback = new LeaderCallback();
 
