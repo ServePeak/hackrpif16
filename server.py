@@ -197,7 +197,13 @@ def parsevotes():
         if store[x] > maxval:
             maxval = store[x]
             max = x
-    return str(max)
+    key = ""
+    with open(os.path.join(os.path.dirname(__file__), './key.txt')) as data_file:
+        key = data_file.readline()
+    url = "http://api.tripadvisor.com/api/partner/2.0/location/" + str(max) + "/restaurants?key=" + key
+    response = urllib.urlopen(url)
+    dump = json.loads(response.read())
+    return dump['data'][0]['name']
 
 if __name__ == '__main__':
 	app.debug = True
